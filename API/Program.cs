@@ -1,5 +1,9 @@
 using API.Extensions;
+using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
-
-
+builder.Services.AddIdentityServices(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -19,7 +22,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("CorsPolicy");
+
+
 
 app.UseAuthorization();
 
@@ -31,8 +36,11 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
     await context.Database.MigrateAsync();
-  
+    Console.Write("888SEEDING DATA");
+    await Seed.SeedData(context, userManager);
+
 }
 catch (Exception ex)
 {

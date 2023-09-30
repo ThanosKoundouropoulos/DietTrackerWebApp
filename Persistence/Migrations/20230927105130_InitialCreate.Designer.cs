@@ -11,14 +11,14 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230820173803_InitialCreate")]
+    [Migration("20230927105130_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
@@ -27,9 +27,6 @@ namespace Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Bio")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -77,6 +74,18 @@ namespace Persistence.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("activityLevel")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("hasDietPlan")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("height")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("weight")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
