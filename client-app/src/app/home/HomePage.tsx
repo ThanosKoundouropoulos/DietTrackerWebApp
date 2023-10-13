@@ -1,40 +1,50 @@
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 import { useStore } from "../stores/store";
-import { Button, Container } from "@mui/material";
+
+import userStore from "../stores/userStore";
+import { Button, Container, Header, Segment } from "semantic-ui-react";
 import LoginForm from "../userForms/LoginForm";
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import { Icon } from '@mui/material';
+import RegisterForm from "../userForms/RegisterForm";
 
 
 export default observer(function HomePage(){
-    const { modalStore} = useStore();
+    const { userStore, modalStore} = useStore();
+    const {userStore : {logout}} = useStore();
     return(
         
+        <Segment inverted textAlign="center" vertical className="masthead">
             <Container>
-                <h1>
-                    <Icon fontSize="large"  style={{marginBottom: 12}} />
+                <Header as='h1' inverted>
+                   
                         Reactivities
-                </h1>
-                
-                    
-                        <h2  content='Welcome to Diet Tracker' />
-                       
-                  
-                
+                </Header>
+                {userStore.isLoggedIn ? (
+                    <>
+                        <Header as='h2' inverted content='Welcome to reactivities' />
+                        <Button as={Link} to='/activities' size="huge" inverted>
+                              Go to Activities!
+                        </Button>
+                    </>
+                ) : (
 
                         <>
-                            <Button onClick={() => modalStore.openModal(<LoginForm/>)} size="large" >
+                            <Button onClick={() => modalStore.openModal(<LoginForm/>)} size="huge" inverted>
                                 Login!
                             </Button>
-                            <Button size="large">
+                            <Button onClick={() => modalStore.openModal(<RegisterForm/>)} size="huge" inverted>
                                 Register
                             </Button>
                         
                         </>
                        
+                )}
+
               
+               
             </Container>
+        </Segment>      
+          
         
     )
 })

@@ -10,6 +10,7 @@ export const routes: RouteObject[] = [
        element:<App />,
        children:[
         {path: 'login', element:<LoginForm/>},
+       
         ]
     }
 ]
