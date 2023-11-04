@@ -3,11 +3,13 @@ import { User, UserFormValues } from "../models/user";
 import agent from "../api/agent";
 import { store } from "./store";
 import { router } from "../router/Routes";
+import { DietGoal } from "../models/dietGoal";
 
 
 
 export default class UserStore {
     user: User | null = null;
+    dietGoal: DietGoal | null = null;
 
     constructor(){
         makeAutoObservable(this);
@@ -17,14 +19,16 @@ export default class UserStore {
         return !!this.user;
     }
 
+    get hasDietPlan() {
+        return this.user?.hasDietPlan;
+    }
+
     login = async (creds: UserFormValues) => {
         try {       
-            console.log(creds.email);
-            console.log(" 1111");
             const user = await agent.Account.login(creds);
-            console.log(creds.email);
             store.commonStore.setToken(user.token);
             runInAction(() => this.user = user);
+            router.navigate('/tracker');
             store.modalStore.closeModal();
         } catch (error) {
             throw error;
@@ -51,10 +55,27 @@ export default class UserStore {
     getUser = async () => {
         try {
             const user = await agent.Account.current();
-            runInAction(() => this.user = user);
+            runInAction(() =>{ 
+                this.user = user;
+                this.dietGoal= user.dietGoal!;
+            })
         } catch (error) {
             console.log(error);
         }
+    }
+
+    loadDietGoal = async () => {
+        
+       
+      
+        if (this.user!.dietGoal) {
+            this.dietGoal = this.user?.dietGoal!;
+            return this.dietGoal;
+        }
+        else{
+                console.log("NOOOO LOAD GOAL 3 :");
+        }
+        
     }
 
 

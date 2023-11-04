@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import 'react-toastify/dist/ReactToastify.css';
 import 'semantic-ui-css/semantic.min.css'
+import './app/styles.css';
 import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './app/router/Routes.tsx'

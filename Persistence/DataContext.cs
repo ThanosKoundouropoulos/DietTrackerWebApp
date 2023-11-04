@@ -10,9 +10,18 @@ namespace Persistence
         {
         }
 
+        public DbSet<DietGoal> DietGoals {get; set;}
+        public DbSet<Food> Foods {get; set;}
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<AppUser>()
+            .HasOne(e => e.DietGoal)
+            .WithOne(e => e.AppUser)
+            .HasForeignKey<DietGoal>(e => e.AppUserId)
+            .IsRequired(false);
         }
         
         

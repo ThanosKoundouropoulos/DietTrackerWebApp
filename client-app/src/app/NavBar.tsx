@@ -1,9 +1,12 @@
 
-import LoginForm from './userForms/LoginForm';
+
 import { observer } from 'mobx-react-lite';
 import { useStore } from './stores/store';
-import { Button, Container, Dropdown, Menu } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Icon, Menu, MenuItem } from 'semantic-ui-react';
 import { Link, NavLink } from 'react-router-dom';
+import { GiProgression,GiMuscularTorso} from 'react-icons/gi';
+import { AiFillHome} from 'react-icons/ai';
+
 
 
 
@@ -16,20 +19,20 @@ export default observer(function NavBar() {
   return (
     <>
      <Menu inverted fixed="top">
-            <Container>
-                <Menu.Item as={NavLink} to='/' header>
-                    Reactivities
-                </Menu.Item>'
-                <Menu.Item as={NavLink} to='/activities' name="Activities"/>
-                <Menu.Item as={NavLink} to='/errors' name="Errors"/>
-                <Menu.Item>
-                    <Button as={NavLink} to='/createActivity' positive content='Create Activity'/>
+            <Container className='navContainer'>
+                <AiFillHome className="icons navIcon" size="35px" />
+                <Menu.Item as={NavLink} to='/tracker' header position='left' className='navItem' >
+                    Diet Tracker
                 </Menu.Item>
-                <Menu.Item position="right">
+                <GiProgression className="icons navIcon" size="35px" />
+                <Menu.Item as={NavLink} to='/' name="Progress" position='left'></Menu.Item>
+                <GiMuscularTorso className="icons navIcon" size="35px" />
+                <Menu.Item as={NavLink} to='/calculator' name="Calculator"  position='left'/>
+               
+                <Menu.Item >
                     
-                    <Dropdown pointing = 'top left' text={user?.displayName}>
+                    <Dropdown pointing = 'top left' text={user?.displayName} icon='user' >
                         <Dropdown.Menu>
-                            <Dropdown.Item as={Link} to={`/profiles/${user?.username}`} text='My prifile' icon='user'/>
                             <Dropdown.Item onClick={logout} text='Logout' icon='power'/>
                         </Dropdown.Menu>
                        

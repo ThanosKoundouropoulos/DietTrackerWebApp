@@ -1,4 +1,11 @@
+using System.Reflection;
+using System.Text.Json.Serialization;
+using Application.Core;
+using Application.Goals;
+using Application.Interfaces;
+using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
+
 using Persistence;
 
 namespace API.Extensions
@@ -15,6 +22,9 @@ namespace API.Extensions
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
+            services.AddControllersWithViews()
+            .AddJsonOptions(options =>
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             services.AddCors(opt =>
             {
@@ -23,7 +33,10 @@ namespace API.Extensions
                     policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
                 });
             });
-            //services.AddMediatR(typeof(List.Handler));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserAccessor ,UserAccessor>();
             return services;
         }
     }

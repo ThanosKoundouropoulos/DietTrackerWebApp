@@ -31,6 +31,8 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     DisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    gender = table.Column<string>(type: "TEXT", nullable: true),
+                    age = table.Column<int>(type: "INTEGER", nullable: false),
                     weight = table.Column<float>(type: "REAL", nullable: false),
                     height = table.Column<float>(type: "REAL", nullable: false),
                     activityLevel = table.Column<int>(type: "INTEGER", nullable: false),

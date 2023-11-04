@@ -10,25 +10,24 @@ import RegisterForm from "../userForms/RegisterForm";
 
 export default observer(function HomePage(){
     const { userStore, modalStore} = useStore();
-    const {userStore : {logout}} = useStore();
     return(
         
-        <Segment inverted textAlign="center" vertical className="masthead">
+        <Segment  vertical className="homepage">
             <Container>
-                <Header as='h1' inverted>
+                <Header as='h1' inverted className="homepageHeader">
                    
-                        Reactivities
+                        Diet Tracker
                 </Header>
                 {userStore.isLoggedIn ? (
                     <>
-                        <Header as='h2' inverted content='Welcome to reactivities' />
-                        <Button as={Link} to='/activities' size="huge" inverted>
-                              Go to Activities!
+                        <Header as='h2' inverted content='Welcome to Diet Tracker' />
+                        <Button as={Link} to='/tracker' size="huge" inverted>
+                              Go to Main Page!
                         </Button>
                     </>
                 ) : (
 
-                        <>
+                        <Container className="homeButtonsContainer">
                             <Button onClick={() => modalStore.openModal(<LoginForm/>)} size="huge" inverted>
                                 Login!
                             </Button>
@@ -36,7 +35,7 @@ export default observer(function HomePage(){
                                 Register
                             </Button>
                         
-                        </>
+                        </Container>
                        
                 )}
 

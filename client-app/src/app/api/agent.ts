@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 import { store } from "../stores/store";
 import { User, UserFormValues } from "../models/user";
+import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
 
 
 
@@ -76,7 +77,13 @@ const requests = {
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 }
 
-
+const DietGoals ={
+    details: (id:string) => requests.get<DietGoal>(`/goals/${id}`),
+    create: (dietGoal: DietGoalFormValues) => requests.post<void>('/goals',dietGoal),
+    update: (dietGoal: DietGoalFormValues) => requests.put<void>(`/goals/${dietGoal.id}`,dietGoal),
+    delete: (id:string) => requests.del<void>(`/goals/${id}`)
+    
+}
 
 const Account = {
     current: () => requests.get<User>('/account'),
@@ -88,6 +95,7 @@ const Account = {
 
 const agent = {
     Account,
+    DietGoals
 }
 
 export default agent;

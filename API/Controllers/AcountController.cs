@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    
+   
     [ApiController]
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
@@ -77,7 +77,8 @@ namespace API.Controllers
             [HttpGet]
             public async Task<ActionResult<UserDto>> GetCurrentUser()
             {
-                var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+                var user = await _userManager.Users.Include(d => d.DietGoal)
+                    .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
                 return CreateUserObject(user);
             }
@@ -88,7 +89,9 @@ namespace API.Controllers
                 {
                     DisplayName = user.DisplayName,
                     Token = _tokenService.CreateToken(user),
-                    Username = user.UserName
+                    Username = user.UserName,
+                    hasDietPlan = user.hasDietPlan,
+                    DietGoal = user.DietGoal
                 };
             }
     }
