@@ -34,6 +34,7 @@ namespace API.Controllers
         {                                                 
             return HandleResult(await Mediator.Send(new Create.Command {DietGoal = dtgoal}));
         }
+        [Authorize]
         [AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDietGoal(Guid id)

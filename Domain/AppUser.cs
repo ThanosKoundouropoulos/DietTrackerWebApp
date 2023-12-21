@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
@@ -11,6 +12,8 @@ namespace Domain
         public float height { get; set; }
         public int activityLevel { get; set; }
         public bool hasDietPlan { get; set; }
+        
+        [JsonIgnore]
         public DietGoal DietGoal { get; set; }
     }
 }

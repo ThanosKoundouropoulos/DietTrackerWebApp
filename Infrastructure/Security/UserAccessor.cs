@@ -10,11 +10,14 @@ namespace Infrastructure.Security
         public UserAccessor(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
+            
 
         }
         public string GetUsername()
         {
-           return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+           var username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            Console.WriteLine($"Username in GetUsername: {username}");
+            return username;
         }
     }
 }

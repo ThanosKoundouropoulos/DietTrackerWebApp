@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { store } from "../stores/store";
 import { User, UserFormValues } from "../models/user";
 import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
+import { Food } from "../models/Food";
 
 
 
@@ -81,7 +82,16 @@ const DietGoals ={
     details: (id:string) => requests.get<DietGoal>(`/goals/${id}`),
     create: (dietGoal: DietGoalFormValues) => requests.post<void>('/goals',dietGoal),
     update: (dietGoal: DietGoalFormValues) => requests.put<void>(`/goals/${dietGoal.id}`,dietGoal),
-    delete: (id:string) => requests.del<void>(`/goals/${id}`)
+    delete: (id:string) => requests.del<void>(`/goals/${id}`),
+    deleteFoodEntry: (goalId: string, foodId: string) => requests.del<void>(`/foods/${goalId}/${foodId}/delete`)
+}
+const Foods ={
+    list: () => requests.get<Food[]>('/foods'),
+    delete: (id:string) => requests.del<void>(`/foods/${id}`),
+    search: (foodName: string) => requests.get<Food[]>(`/foods/search?foodName=${foodName}`),
+    add: (foodId: string, amountConsumed: number) =>requests.post<Food>(`/foods/${foodId}/add`, { amountConsumed })
+
+
     
 }
 
@@ -95,7 +105,8 @@ const Account = {
 
 const agent = {
     Account,
-    DietGoals
+    DietGoals,
+    Foods
 }
 
 export default agent;

@@ -18,13 +18,20 @@ namespace API.Extensions
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            services.AddDbContext<DataContext>(opt =>
-            {
-                opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
-            });
-            services.AddControllersWithViews()
+           services.AddDbContext<DataContext>(options =>
+                options.UseSqlite(config.GetConnectionString("DefaultConnection"))
+                    .EnableSensitiveDataLogging()
+            );
+            /*services.AddControllersWithViews()
             .AddJsonOptions(options =>
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
+            services.AddControllers().AddJsonOptions(options =>
+{
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            });*/
+                
 
             services.AddCors(opt =>
             {

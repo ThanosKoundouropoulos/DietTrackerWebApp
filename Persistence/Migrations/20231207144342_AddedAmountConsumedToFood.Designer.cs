@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231207144342_AddedAmountConsumedToFood")]
+    partial class AddedAmountConsumedToFood
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -139,9 +142,6 @@ namespace Persistence.Migrations
                     b.Property<Guid>("GoalId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("amountConsumed")
-                        .HasColumnType("REAL");
-
                     b.HasKey("FoodId", "GoalId");
 
                     b.HasIndex("GoalId");
@@ -154,6 +154,9 @@ namespace Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("amountConsumed")
+                        .HasColumnType("REAL");
 
                     b.Property<double>("calories")
                         .HasColumnType("REAL");

@@ -1,6 +1,6 @@
-namespace Domain
+namespace Application.Foods
 {
-    public class Food
+    public class ConsumedFoodDto
     {
         public Guid Id { get; set; }
         public string name { get; set; }
@@ -8,7 +8,6 @@ namespace Domain
         public double proteins { get; set; }
         public double carbs { get; set; }
         public double fats { get; set; }
-        public ICollection<DietGoalFoods> DietGoals  { get; set; }
-     
+        public double amountConsumed { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231115213038_AddedFoods")]
+    partial class AddedFoods
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -129,24 +132,6 @@ namespace Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("DietGoals");
-                });
-
-            modelBuilder.Entity("Domain.DietGoalFoods", b =>
-                {
-                    b.Property<Guid>("FoodId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("GoalId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("amountConsumed")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("FoodId", "GoalId");
-
-                    b.HasIndex("GoalId");
-
-                    b.ToTable("DietGoalFoods");
                 });
 
             modelBuilder.Entity("Domain.Food", b =>
@@ -312,25 +297,6 @@ namespace Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Domain.DietGoalFoods", b =>
-                {
-                    b.HasOne("Domain.Food", "Food")
-                        .WithMany("DietGoals")
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.DietGoal", "DietGoal")
-                        .WithMany("Foods")
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DietGoal");
-
-                    b.Navigation("Food");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -385,16 +351,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
                     b.Navigation("DietGoal");
-                });
-
-            modelBuilder.Entity("Domain.DietGoal", b =>
-                {
-                    b.Navigation("Foods");
-                });
-
-            modelBuilder.Entity("Domain.Food", b =>
-                {
-                    b.Navigation("DietGoals");
                 });
 #pragma warning restore 612, 618
         }

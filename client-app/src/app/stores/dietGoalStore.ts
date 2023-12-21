@@ -7,22 +7,25 @@ import agent from "../api/agent";
 
 import { store } from "./store";
 import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
+import { Macronutrients } from "../models/macros";
+import { router } from "../router/Routes";
+import { useNavigate } from "react-router-dom";
+import { Food } from "../models/Food";
 
-interface Macronutrients {
-    carbs: number;
-    protein: number;
-    fat: number;
-  }
+
 
 export default class DietGoalStore{
    selectedDietGoal: DietGoal | undefined = undefined;
+   remainingDietGoal: DietGoal | undefined = undefined;
+   consumedCalories: number = 0;
+   consumedProteins: number = 0;
+   consumedCarbs: number = 0;
+   consumedFats: number = 0;
    editMode = false;
    loading = false;
    loadingInitial = false;
-
-  
    
-
+    
     constructor(){
         makeAutoObservable(this)
     }
@@ -95,7 +98,79 @@ export default class DietGoalStore{
         }
     }
 
- 
+    addFoodToDiet = async (selectedFood: Food,amount: number) => {
+        const foodsStore = store.foodStore
+        const convertedFood = {
+          ...selectedFood,
+          calories: (selectedFood.calories || 0) * amount,
+          proteins: (selectedFood.proteins || 0) * amount,
+          carbs: (selectedFood.carbs || 0) * amount,
+          fats: (selectedFood.fats || 0) * amount,
+          amountConsumed: amount,
+        };
+        try {
+          console.log(`Added food to diet: ${selectedFood.name}, Amount: ${amount}`);
+          const existingFood = foodsStore.foods.find((food) => food.id === selectedFood.id);
+
+          if (!existingFood) {
+            
+            runInAction(() => {foodsStore.foods.push(convertedFood);});
+            this.subtractFromDietGoal(convertedFood);
+          }else{
+              runInAction(() => {
+                existingFood.calories = (existingFood.calories || 0) + (selectedFood.calories || 0) * amount;
+                existingFood.proteins = (existingFood.proteins || 0) + (selectedFood.proteins || 0) * amount;
+                existingFood.carbs = (existingFood.carbs || 0) + (selectedFood.carbs || 0) * amount;
+                existingFood.fats = (existingFood.fats || 0) + (selectedFood.fats || 0) * amount;
+                existingFood.amountConsumed = (existingFood.amountConsumed || 0) + amount;
+              });
+              this.subtractFromDietGoal(convertedFood);
+          }
+          
+          await agent.Foods.add(selectedFood.id, amount);
+          
+        } catch (error) {
+          console.error('Error adding food to diet:', error);
+          throw error;
+        }
+      };
+      
+      deleteFoodEntry = async (goalId: string, foodId: string ) => {
+        const foods = store.foodStore
+        try {
+          const foodToDelete = foods.foods.find((food) => food.id === foodId);
+          console.log(` food to delete: ${foodToDelete?.name}, Calories: ${foodToDelete?.calories}`);
+          await agent.DietGoals.deleteFoodEntry(goalId, foodId);
+          runInAction(() => foods.removeFood(foodId));
+          if (foodToDelete) {
+            this.addBackToDietGoal(foodToDelete);
+          }
+          
+        } catch (error) {
+          console.error('Error deleting food entry:', error);
+          throw error;
+        }
+      };
+
+      clearDietGoal = async (goalId: string) => {
+       
+        const foodStore = store.foodStore;
+        try {
+          runInAction(() =>  this.loading = true);
+          for (const food of foodStore.foods) {
+          
+            await agent.DietGoals.deleteFoodEntry(goalId, food.id);
+   
+            runInAction(() => foodStore.removeFood(food.id));
+            this.addBackToDietGoal(food);
+            runInAction(() =>  this.loading = false);
+          }
+        } catch (error) {
+          console.error('Error clearing diet goal:', error);
+          runInAction(() =>  this.loading = false);
+          throw error;
+        }
+      };
 
     loadDietGoal = async () => {
         const user = store.userStore.user;
@@ -120,47 +195,37 @@ export default class DietGoalStore{
         }
         
     }
+    addBackToDietGoal = async (foodToDelete: Food) => {
+      this.remainingDietGoal!.calories += foodToDelete.calories;
+      this.remainingDietGoal!.proteins += foodToDelete.proteins;
+      this.remainingDietGoal!.carbs += foodToDelete.carbs;
+      this.remainingDietGoal!.fats += foodToDelete.fats;
+      this.consumedCalories -= foodToDelete.calories;
+      this.consumedProteins -= foodToDelete.proteins;
+      this.consumedCarbs -= foodToDelete.carbs;
+      this.consumedFats -= foodToDelete.fats;
+    }
 
- 
+    subtractFromDietGoal = async (foodToAdd: Food) => {
+      this.remainingDietGoal!.calories -= foodToAdd.calories;
+      this.remainingDietGoal!.proteins -= foodToAdd.proteins;
+      this.remainingDietGoal!.carbs -= foodToAdd.carbs;
+      this.remainingDietGoal!.fats -= foodToAdd.fats;
+      this.consumedCalories+= foodToAdd.calories;
+      this.consumedProteins += foodToAdd.proteins;
+      this.consumedCarbs += foodToAdd.carbs;
+      this.consumedFats+= foodToAdd.fats;
+    }
 
-   
+    loadRemainingDietGoal = async (dietGoal: DietGoal) => {
+        this.remainingDietGoal = dietGoal;  
+    }
 
-   
+    
 
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     }
 
    
-  
-
-    
-    updateActivity = async (activity: DietGoalFormValues) => {
-    
-        try {
-            
-            runInAction(() => {
-               
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    deleteActivity = async (id: string) => {
-        this.loading = true;
-        try {
-          
-            runInAction(() => {
-               
-            })
-        } catch (error) {
-            console.log(error);
-            runInAction(() => {
-                this.loading = false
-            })
-        }
-    }
-
-  
 }

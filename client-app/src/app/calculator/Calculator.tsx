@@ -37,7 +37,7 @@ export default observer(function Calculator() {
         plan: Yup.string().required(),
     })
     useEffect(() => {
-        if (id) loadDietGoal(id).then(dietGoal => setDietGoal(new DietGoalFormValues(dietGoal)))
+        if (id) loadDietGoal().then(dietGoal => setDietGoal(new DietGoalFormValues(dietGoal)))
     }, [id ,loadDietGoal]);
     //display the content of this ability in the form if it is available
     //init state is either the selected activity we pass or the properties in an activity object
@@ -54,7 +54,7 @@ export default observer(function Calculator() {
         }
     }
     return (
-        <Container clearing className="calculator">
+        <Container className="calculator">
             <Header content='Calculate your calorie plan !' sub color='teal'/>
             <Formik 
                 validationSchema={validationSchema}
@@ -70,7 +70,7 @@ export default observer(function Calculator() {
                             <MySelectInput label="Activity Level" options={activityLevelOptions}   name='activityLevel' />
                             <MySelectInput label="What are you planning to do ?" options={goalOptions}   name='plan' />
                             <Button 
-                               
+                                
                                 loading={isSubmitting} floated='right' 
                                 positive type='submit' content='Submit'/>
                             <Button as={Link}  to='/tracker' floated='right'  type='button' content='Cancel'/>
