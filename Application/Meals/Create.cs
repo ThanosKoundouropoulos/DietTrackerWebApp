@@ -1,0 +1,75 @@
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Core;
+using Application.Interfaces;
+using Domain;
+using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
+
+namespace Application.Meals
+{
+    public class Create
+    {
+        public class Command : IRequest<Result<Unit>>
+        {
+            public Meal Meal { get; set; }
+        }
+
+        public class Handler : IRequestHandler<Command, Result<Unit>>
+        {
+            private readonly DataContext _context;
+            private readonly IUserAccessor _userAccessor;
+
+            public Handler(DataContext context, IUserAccessor userAccessor)
+            {
+                _context = context ?? throw new ArgumentNullException(nameof(context));
+                _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
+            }
+
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            {
+                try
+                {
+                    var userName = _userAccessor.GetUsername();
+
+                    if (string.IsNullOrEmpty(userName))
+                    {
+                        return Result<Unit>.Failure("Username is null or empty.");
+                    }
+
+                    var user = await _context.Users
+                        .Include(u => u.DietGoal)
+                        .FirstOrDefaultAsync(x => x.UserName == userName, cancellationToken);
+
+                    if (user == null)
+                    {
+                        return Result<Unit>.Failure($"User with username '{userName}' not found in the database.");
+                    }
+
+                    var newMeal = new Meal
+                    {
+                        name = request.Meal.name,
+                        description = request.Meal.description,
+                        calories = request.Meal.calories,
+                        proteins = request.Meal.proteins,
+                        carbs = request.Meal.carbs,
+                        fats = request.Meal.fats
+                        
+                    };
+                    _context.Meals.Add(newMeal);
+                    var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+                    return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem updating database.");
+                }
+                catch (Exception ex)
+                {
+                    return Result<Unit>.Failure($"Problem adding meal: {ex.Message}");
+                }
+            }
+        }
+    }
+}

@@ -6,6 +6,7 @@ import { store } from "../stores/store";
 import { User, UserFormValues } from "../models/user";
 import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
 import { Food } from "../models/Food";
+import { Meal, MealFormValues } from "../models/meal";
 
 
 
@@ -83,16 +84,22 @@ const DietGoals ={
     create: (dietGoal: DietGoalFormValues) => requests.post<void>('/goals',dietGoal),
     update: (dietGoal: DietGoalFormValues) => requests.put<void>(`/goals/${dietGoal.id}`,dietGoal),
     delete: (id:string) => requests.del<void>(`/goals/${id}`),
+    deleteMealEntry: (goalId: string, mealId: string) => requests.del<void>(`/meals/${goalId}/${mealId}/deleteMealEntry`),
     deleteFoodEntry: (goalId: string, foodId: string) => requests.del<void>(`/foods/${goalId}/${foodId}/delete`)
 }
 const Foods ={
     list: () => requests.get<Food[]>('/foods'),
     delete: (id:string) => requests.del<void>(`/foods/${id}`),
     search: (foodName: string) => requests.get<Food[]>(`/foods/search?foodName=${foodName}`),
-    add: (foodId: string, amountConsumed: number) =>requests.post<Food>(`/foods/${foodId}/add`, { amountConsumed })
+    add: (foodId: string, amountConsumed: number) =>requests.post<Food>(`/foods/${foodId}/add`, { amountConsumed }) 
+}
 
-
-    
+const Meals ={
+    list: () => requests.get<Meal[]>('/meals'),
+    listEntries: (goalId: string) => requests.get<Meal[]>(`/meals/${goalId}/entries`),
+    delete: (id:string) => requests.del<void>(`/meals/${id}`),
+    create: (meal: MealFormValues) => requests.post<void>('/meals',meal),
+    add: (mealId: string) =>requests.post<Meal>(`/meals/${mealId}/add`,{}) 
 }
 
 const Account = {
@@ -106,7 +113,8 @@ const Account = {
 const agent = {
     Account,
     DietGoals,
-    Foods
+    Foods,
+    Meals
 }
 
 export default agent;

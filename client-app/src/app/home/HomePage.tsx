@@ -8,15 +8,19 @@ import RegisterForm from "../userForms/RegisterForm";
 
 
 export default observer(function HomePage(){
-    const { userStore, modalStore} = useStore();
+    const { userStore, modalStore } = useStore();
+
+    
     return(
         
         <Segment  vertical className="homepage">
-            <Container>
-                <Header as='h1' inverted className="homepageHeader">
-                   
-                        Diet Tracker
-                </Header>
+                <Container className="homepageCont" >
+                    <Header as='h1' inverted >
+                        Diet Tracker <br/>
+                    </Header>
+                    <Header as='h2' inverted>Track the calories you burn ! </Header>
+                </Container>
+                
                 {userStore.isLoggedIn ? (
                     <>
                         <Header as='h2' inverted content='Welcome to Diet Tracker' />
@@ -40,7 +44,7 @@ export default observer(function HomePage(){
 
               
                
-            </Container>
+           
         </Segment>      
           
         

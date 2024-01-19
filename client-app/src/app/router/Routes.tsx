@@ -3,6 +3,7 @@ import App from "../App";
 import LoginForm from "../userForms/LoginForm";
 import TrackerView from "../tracker/TrackerView";
 import Calculator from "../calculator/Calculator";
+import Progress from "../progress/Progress";
 
 
 
@@ -17,6 +18,7 @@ export const routes: RouteObject[] = [
         {path: 'login', element:<LoginForm/>},
         {path: 'tracker', element:<TrackerView/>},
         {path: 'calculator', element:<Calculator/>},
+        {path: 'progress', element:<Progress/>}
        
         ]
     }

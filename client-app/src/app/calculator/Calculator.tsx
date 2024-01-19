@@ -80,40 +80,6 @@ export default observer(function Calculator() {
             </Formik>
          
         </Container>
-       
-        
-       /*<Formik
-            initialValues={dietGoal}
-            onSubmit={values => handleFormSubmit(values)}
-                validationSchema={Yup.object({
-                    age: Yup.string().required(),
-                    weight: Yup.string().required(),
-                    height: Yup.string().required(),
-                    password: Yup.string().required(),
-                })}
-        >
-            {({handleSubmit, isSubmitting,errors, isValid,dirty}) => (
-                <Form className="ui form error" onSubmit={handleSubmit} autoComplete="off">
-                    <Header as='h2' content='Calculate your calorie plan !' color="teal" textAlign="center"/>
-                    <MyTextInput placeholder="Age" name="age"/>
-                    <MyTextInput placeholder="Weight" name="weight"/>
-                    <MyTextInput placeholder="Height" name="height"/>
-                    <MySelectInput label="Gender" options={genderOptions}   name='gender' />
-                    <MySelectInput label="Activity Level" options={activityLevelOptions}   name='activityLevel' />
-                    <MySelectInput label="What are you planning to do ?" options={goalOptions}   name='plan' />
-                    <Button 
-                        disabled={ !dirty || isSubmitting}
-                        loading={isSubmitting} 
-                        positive content='Calculate' 
-                        type="submit" fluid/>
-                    <Button as={Link}  to='/tracker' color="red" floated='right'  type='button' content='Cancel'/>
-                </Form>
-            )}
-
-
-
-        </Formik>*/
-    
       
     )
   })

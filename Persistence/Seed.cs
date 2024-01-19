@@ -128,6 +128,7 @@ namespace Persistence
                             fats = 50.39
                         }
                     };
+                    
                 await context.DietGoals.AddRangeAsync(dietGoals);
                 await context.Foods.AddRangeAsync(foods);
                 await context.SaveChangesAsync();

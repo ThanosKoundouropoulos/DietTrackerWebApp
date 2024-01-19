@@ -39,7 +39,7 @@ export default class FoodStore{
             fats: food.fats * (food.amountConsumed || 1),
           }));
           this.loadingInitial = false;
-          this.subtractFromGoal();
+          this.subtractFoodFromGoal();
         });
       } catch (error) {
         console.error(error);
@@ -61,7 +61,7 @@ export default class FoodStore{
       }
     };
 
-    subtractFromGoal = () => {
+    subtractFoodFromGoal = () => {
       const dietGoalStore = store.dietGoalStore;
       const totalCalories = this.foods.reduce((sum, food) => sum + (food.calories || 0), 0);
       const totalProteins = this.foods.reduce((sum, food) => sum + (food.proteins || 0), 0);

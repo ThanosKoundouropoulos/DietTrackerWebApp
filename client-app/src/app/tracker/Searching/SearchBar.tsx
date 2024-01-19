@@ -100,7 +100,7 @@ export const SearchBar: React.FC<SearchBarProps> = observer(({ setResults, onAdd
   
     return (
       <>
-       <Container className="input-wrapper">
+       <Container className="search-input-wrapper">
             <FaSearch id="search-icon" />
                 <Input className="foodInput"
                     name="food"
@@ -126,25 +126,3 @@ export const SearchBar: React.FC<SearchBarProps> = observer(({ setResults, onAdd
        
       );
 });
-
-
-  /*const fetchData = (value) => {
-      fetch("https://jsonplaceholder.typicode.com/users")
-        .then((response) => response.json())
-        .then((json) => {
-          const results = json.filter((user) => {
-            return (
-              value &&
-              user &&
-              user.name &&
-              user.name.toLowerCase().includes(value)
-            );
-          });
-          setResults(results);
-        });
-    };*/
-  
-  /*  const handleChange = (value) => {
-      setInput(value);
-      fetchData(value);
-    };*/

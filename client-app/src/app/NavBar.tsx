@@ -25,7 +25,7 @@ export default observer(function NavBar() {
                     Diet Tracker
                 </Menu.Item>
                 <GiProgression className="icons navIcon" size="35px" />
-                <Menu.Item as={NavLink} to='/' name="Progress" position='left'></Menu.Item>
+                <Menu.Item as={NavLink} to='/progress' name="Progress" position='left'></Menu.Item>
                 <GiMuscularTorso className="icons navIcon" size="35px" />
                 <Menu.Item as={NavLink} to='/calculator' name="Calculator"  position='left'/>
                

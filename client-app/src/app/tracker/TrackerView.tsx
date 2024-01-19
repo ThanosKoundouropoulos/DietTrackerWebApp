@@ -14,6 +14,9 @@ import { SearchResultsList } from "./Searching/SearchResultList";
 import RemainingMacros from "./FoodsAndMacros/RemainingMacros";
 import StatisticsChart from "./Statistics/PieChart";
 import DonutChart from "./Statistics/DonutChart";
+import MealsList from "./Meals/MealsList";
+import modalStore from "../stores/modalStore";
+import CreateForm from "./Meals/CreateForm";
 
 
 
@@ -22,31 +25,39 @@ import DonutChart from "./Statistics/DonutChart";
 
 
 export default observer(function TrackerView() {
-  
-  const { userStore ,foodStore ,dietGoalStore} = useStore();
+
+  const { userStore ,foodStore ,dietGoalStore ,mealStore} = useStore();
   const {loadFoods,foods} = foodStore;
+  const {isCreating,setCreating,meals,loadMeals,mealEntries,loadMealEntries} = mealStore;
   const {addFoodToDiet} = dietGoalStore;
-  const {userStore : {user,dietGoal}} = useStore();
+  const {userStore : {user,dietGoal,getUser}} = useStore();
   const [results, setResults] = useState<Food[]>([]);
 
 
 
  
 
-  useEffect(() => {
-    if (user) {
+  /*useEffect(() => {
+    if (!user) {
       console.log('foodStore instance IN TRACKER user load:');
-      userStore.getUser();
+      getUser();
     }
     
-  },[userStore])
+  },[getUser,user])*/
 
   useEffect(() => {
     if (user && dietGoal) {
       console.log('foodStore instance IN TRACKER diet goal load:');
+      
       if (foods.length ===0) loadFoods();
+      console.log('foodS:' , foods.length);
+      if (meals.length ===0) loadMeals();
+      if (mealEntries.length ===0) loadMealEntries(dietGoal.id);
+     
+    }else{
+      console.log('NO USER');
     }
-  }, [user, dietGoal, loadFoods]);
+  }, [user, dietGoal, loadFoods,loadMeals,loadMealEntries]);
 
 
 
@@ -113,16 +124,20 @@ export default observer(function TrackerView() {
              
       
         
-      <Grid.Column width='2'>
-     
-      <Segment textAlign="center" className="mealsContainer">
+      <Grid.Column width='3'>
+      {!isCreating ? (
+        <Segment textAlign="center"  className="mealsContainer">
+          <Header as='h1' inverted className="macros">My Meals</Header>
+          {meals.length === 0 ? (
+            <Header  as='h2' inverted className="macros">No meals available, create your custom meals to use anytime you want !</Header>
+          ) : (
+            <MealsList/>
+          )}
+          
+          <Button onClick={() => {setCreating(true); console.log(isCreating);}}  positive content='Create Meal' className="mealBtn"></Button>
+        </Segment> 
+      ): <CreateForm/>}
       
-      <Header as='h1' inverted className="macros">
-                              
-         Meals
-         //To Do
-      </Header>
-      </Segment>  
       </Grid.Column>
       </Grid>
         
@@ -133,4 +148,3 @@ export default observer(function TrackerView() {
     );
   })
 
-   //{results && results.length > 0 && <SearchResultsList results={results} />}

@@ -13,5 +13,6 @@ namespace Domain
         [JsonIgnore]
         public AppUser AppUser { get; set; }
         public ICollection<DietGoalFoods> Foods  { get; set; } = new List<DietGoalFoods>();
+        public ICollection<DietGoalMeals> Meals  { get; set; } = new List<DietGoalMeals>();
     }
 }

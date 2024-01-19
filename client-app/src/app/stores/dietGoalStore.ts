@@ -11,6 +11,7 @@ import { Macronutrients } from "../models/macros";
 import { router } from "../router/Routes";
 import { useNavigate } from "react-router-dom";
 import { Food } from "../models/Food";
+import { Meal } from "../models/meal";
 
 
 
@@ -53,25 +54,28 @@ export default class DietGoalStore{
     }
 
     private calculateCalorieIntake(age: number, gender: string,weightKg: number,heightCm: number,activityLevel: number,plan: string){
-        const heightM = heightCm / 100;
-      
-        // Calculate BMR 
-        let bmr: number;
-        let calorieIntake: number;
-        if (gender === "male") {
-          bmr = 88.362 + 13.397 * weightKg + 4.799 * heightM - 5.677 * age;
-        } else {
-          bmr = 447.593 + 9.247 * weightKg + 3.098 * heightM - 4.330 * age;
-        }
+      const heightM = heightCm / 100;
+
+      // Calculate BMR using Mifflin-St Jeor equation
+      let bmr: number;
+      if (gender === "male") {
+        bmr = 10 * weightKg + 6.25 * heightCm - 5 * age + 5;
+      } else {
+        bmr = 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
+      }
     
-         calorieIntake = bmr * activityLevel;
-        if (plan === "lose") {
-            calorieIntake -= 500;
-          } else {
-            calorieIntake += 300;
-          }
-      
-        return calorieIntake;
+      // Calculate TDEE based on activity level
+      const tdee = bmr * activityLevel;
+    
+      // Adjust for weight loss/gain goals
+      let calorieIntake: number;
+      if (plan === "lose") {
+        calorieIntake = tdee - 500;
+      } else {
+        calorieIntake = tdee + 300;
+      }
+    
+      return calorieIntake;
         
     }
 
@@ -134,43 +138,93 @@ export default class DietGoalStore{
           throw error;
         }
       };
-      
-      deleteFoodEntry = async (goalId: string, foodId: string ) => {
-        const foods = store.foodStore
-        try {
-          const foodToDelete = foods.foods.find((food) => food.id === foodId);
-          console.log(` food to delete: ${foodToDelete?.name}, Calories: ${foodToDelete?.calories}`);
-          await agent.DietGoals.deleteFoodEntry(goalId, foodId);
-          runInAction(() => foods.removeFood(foodId));
-          if (foodToDelete) {
-            this.addBackToDietGoal(foodToDelete);
-          }
-          
-        } catch (error) {
-          console.error('Error deleting food entry:', error);
-          throw error;
-        }
-      };
 
-      clearDietGoal = async (goalId: string) => {
-       
-        const foodStore = store.foodStore;
-        try {
-          runInAction(() =>  this.loading = true);
-          for (const food of foodStore.foods) {
-          
-            await agent.DietGoals.deleteFoodEntry(goalId, food.id);
-   
-            runInAction(() => foodStore.removeFood(food.id));
-            this.addBackToDietGoal(food);
-            runInAction(() =>  this.loading = false);
-          }
-        } catch (error) {
-          console.error('Error clearing diet goal:', error);
-          runInAction(() =>  this.loading = false);
-          throw error;
+    addMealToDiet = async (selectedMeal: Meal) => {
+      const mealStore = store.mealStore
+      if (!selectedMeal.quantity) {
+        selectedMeal.quantity =1;
+      }
+      
+      try {
+        
+        const meal = mealStore.mealEntries.find((meal) => meal.id === selectedMeal.id);
+        await agent.Meals.add(selectedMeal.id);
+        if (!meal) {
+          console.log(`Added meal to diet: ${selectedMeal.name} , with qunatity :  ${selectedMeal.quantity}`);
+          runInAction(() => {mealStore.mealEntries.push(selectedMeal);});
+          this.subtractFromDietGoal(selectedMeal);
+        }else{
+            console.log(`Added meal to diet 2: ${selectedMeal.name} , with qunatity :  ${meal.quantity}`);
+            runInAction(() => {
+              meal.calories = (selectedMeal.calories || 0) * (meal.quantity || 0) ;
+              meal.proteins = (selectedMeal.proteins || 0) * (meal.quantity || 0);
+              meal.carbs = (selectedMeal.carbs || 0) * (meal.quantity || 0) ;
+              meal.fats = (selectedMeal.fats || 0) * (meal.quantity || 0);
+              meal.quantity +=1;
+            });
+            this.subtractFromDietGoal(meal);
+        }    
+        console.log(`meals: ${mealStore.mealEntries.length}`);
+        
+      } catch (error) {
+        console.error('Error adding food to diet:', error);
+        throw error;
+      }
+    };
+      
+    deleteFoodEntry = async (goalId: string, foodId: string ) => {
+      const foods = store.foodStore
+      try {
+        const foodToDelete = foods.foods.find((food) => food.id === foodId);
+        console.log(` food to delete: ${foodToDelete?.name}, Calories: ${foodToDelete?.calories}`);
+        await agent.DietGoals.deleteFoodEntry(goalId, foodId);
+        runInAction(() => foods.removeFood(foodId));
+        if (foodToDelete) {
+          this.addBackToDietGoal(foodToDelete);
         }
-      };
+        
+      } catch (error) {
+        console.error('Error deleting food entry:', error);
+        throw error;
+      }
+    };
+
+    deleteMealEntry = async (goalId: string, mealId: string ) => {
+      const mealStore = store.mealStore
+      try {
+        const mealToDelete = mealStore.mealEntries.find((meal) => meal.id === mealId);
+        console.log(` meal entry to delete: ${mealToDelete?.name}, Calories: ${mealToDelete?.calories}`);
+        await agent.DietGoals.deleteMealEntry(goalId, mealId);
+        runInAction(() => mealStore.removeMealEntry(mealId));
+        if (mealToDelete) {
+          this.addBackToDietGoal(mealToDelete);
+        }
+        
+      } catch (error) {
+        console.error('Error deleting meal entry:', error);
+        throw error;
+      }
+    };
+
+    clearDietGoal = async (goalId: string) => {
+      
+      const foodStore = store.foodStore;
+      try {
+        runInAction(() =>  this.loading = true);
+        for (const food of foodStore.foods) {
+        
+          await agent.DietGoals.deleteFoodEntry(goalId, food.id);
+  
+          runInAction(() => foodStore.removeFood(food.id));
+          this.addBackToDietGoal(food);
+          runInAction(() =>  this.loading = false);
+        }
+      } catch (error) {
+        console.error('Error clearing diet goal:', error);
+        runInAction(() =>  this.loading = false);
+        throw error;
+      }
+    };
 
     loadDietGoal = async () => {
         const user = store.userStore.user;
@@ -195,7 +249,7 @@ export default class DietGoalStore{
         }
         
     }
-    addBackToDietGoal = async (foodToDelete: Food) => {
+    addBackToDietGoal = async (foodToDelete: Food | Meal) => {
       this.remainingDietGoal!.calories += foodToDelete.calories;
       this.remainingDietGoal!.proteins += foodToDelete.proteins;
       this.remainingDietGoal!.carbs += foodToDelete.carbs;
@@ -206,7 +260,7 @@ export default class DietGoalStore{
       this.consumedFats -= foodToDelete.fats;
     }
 
-    subtractFromDietGoal = async (foodToAdd: Food) => {
+    subtractFromDietGoal = async (foodToAdd: Food | Meal) => {
       this.remainingDietGoal!.calories -= foodToAdd.calories;
       this.remainingDietGoal!.proteins -= foodToAdd.proteins;
       this.remainingDietGoal!.carbs -= foodToAdd.carbs;

@@ -1,15 +1,27 @@
 body{
+    font-family: 'Roboto Mono', monospace !important; 
     background-color:    #455d7a !important;
     overflow: hidden;
-    font-family: monospace !important;
+    
   }
 
 
   .homepage {
+    position: absolute;
+    width: 100%;
+    height: 1000px;
     display: flex;
-    
-    background-color: #233142
+    background-color: #233142 !important; 
   }
+
+  .homepage .homepageCont {
+    font-size: 25px;
+    position: absolute;
+    top: 80px;
+    left: 80px;
+   
+  }
+
 
   .homepage .homeButtonsContainer{
     position: absolute;
@@ -61,7 +73,27 @@ body{
   {
       border-radius: 15px;
   }
-  
+  .input-wrapper{
+    height: 40px;
+    border-radius: 5px;
+    padding: 5px 15px;
+    box-shadow: 0 0 10px;
+    background-color: #455d7a;
+    width: 500px;
+    display: flex;
+    align-items: baseline;
+  }
+
+  .input-wrapper-area{
+    height: 120px;
+    border-radius: 5px;
+    padding: 5px 15px;
+    box-shadow: 0 0 10px;
+    background-color: #455d7a;
+    width: 500px;
+    display: flex;
+    align-items: baseline;
+  }
 
 .trackerGrid{
   position: absolute;
@@ -126,6 +158,7 @@ body{
 .trackerGrid .entriesContainer{
   z-index: 1;
   position: relative;
+  overflow-y: scroll;
   top: 75px;
   left: -43px;
   background-color: #233142;
@@ -139,7 +172,7 @@ body{
   align-items: center; 
 }
 
-.trackerGrid .entriesContainer .input-wrapper {
+.trackerGrid .entriesContainer .search-input-wrapper {
   position: relative;
   top: 25px;
   left: -120px;
@@ -200,7 +233,7 @@ body{
 }
 
 
-.input-wrapper .foodInput {
+.search-input-wrapper .foodInput {
   position: relative;
   left: 10px;
   background-color: #455d7a;
@@ -261,7 +294,7 @@ body{
 .trackerGrid .mealsContainer {
   position: absolute;
   top: -20px;
-  right: -60px;
+  right: 30px;
   height: 70px;
   background-color: #233142;
   height: 70vh;
@@ -270,8 +303,142 @@ body{
   border: 4px solid black;
   box-shadow: 0 0 10px;
 
-  
+}
 
+.trackerGrid .mealForm{
+  position: absolute;
+  top: -20px;
+  right: 50px;
+  height: 70vh;
+  width: 550px;
+  padding: 15px;
+  background-color: #233142;
+  border-radius: 5px;
+  border: 4px solid black;
+  box-shadow: 0 0 10px;
+}
+
+.trackerGrid .mealForm .macrosInput{
+    height: 40px;
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin-top: 5px;
+    box-shadow: 0 0 10px;
+    background-color: #455d7a;
+    width: 80px;
+    display: flex;
+    align-items: baseline;
+}
+
+.trackerGrid .mealForm .input-wrapper-area{
+  position: relative;
+  top: 35px;
+}
+
+.trackerGrid .mealForm .icons-flame{
+  position: relative;
+  top: 60px;
+  left: -120px;
+  color: orangered;
+}
+
+.trackerGrid .mealForm .macrosInput-cals{
+  position: relative;
+  top: 20px;
+  left: -60px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  box-shadow: 0 0 5px;
+  background-color: #455d7a;
+  width: 80px;
+  display: flex;
+  align-items: baseline;
+}
+
+.trackerGrid .mealForm .macrosInput-pro{
+  position: relative;
+  top: -50px;
+  left: 90px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  box-shadow: 0 0 5px;
+  background-color: #455d7a;
+  width: 80px;
+  display: flex;
+  align-items: baseline;
+}
+
+.trackerGrid .mealForm .macrosInput-carbs{
+  position: relative;
+  top: -50px;
+  left: -59px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  box-shadow: 0 0 5px;
+  background-color: #455d7a;
+  width: 80px;
+  display: flex;
+  align-items: baseline;
+}
+
+.trackerGrid .mealForm .macrosInput-fats{
+  position: relative;
+  top: -120px;
+  left: 90px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  box-shadow: 0 0 5px;
+  background-color: #455d7a;
+  width: 80px;
+  display: flex;
+  align-items: baseline;
+}
+
+
+.trackerGrid .mealsContainer .mealsListContainer {
+  position: relative;
+  z-index: 1;
+  overflow-y: scroll;
+  height: 50vh;
+  width: 350px;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.trackerGrid .mealsContainer .mealsListContainer .meal-wrapper{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-radius: 5px;
+  background-color: #455d7a;
+  box-shadow: 0 0 10px;
+  width: 300px; 
+  height: 45px;
+  padding: 5px; 
+  margin-bottom: 10px;
+ 
+}
+
+.trackerGrid .mealsContainer .mealsListContainer .meal-details-card{
+  position: absolute;
+  z-index: 2;
+  top: -10px;
+  left: 30px;
+  width: 240px;
+  height:240px;
+  border: #233142;
+  background-color: #455d7a;
+  box-shadow: 0 0 10px;
+}
+
+.trackerGrid .mealsContainer .mealBtn {
+   position: absolute;
+   width: 150px;
+   bottom:  25px;
+   left: 95px;
 }
 
 .trackerGrid .macrosHeader .macros{
@@ -349,7 +516,17 @@ body{
   border-radius: 10px;
 }
 
-
+.weightContainer {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 300px !important; 
+  background-color: #233142;
+  height: 80vh;
+  border-radius: 5px;
+  border: 4px solid black;
+  box-shadow: 0 0 10px;
+}
 
 input:focus {
   outline: none;
@@ -361,23 +538,22 @@ input:focus {
 
 .calculator{
   position: absolute;
-  align-items: center; 
-  top: 100px;
+  top: 150px;
   left: 300px;
   width: 1000px;
   border-radius: 10px;
   border: 2px solid #233142;
   background-color: #233142;
   box-shadow: 0 0 10px;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
 }
 .buttons{
   border-radius: 25px;
   
 }
 
-.icon{
-  
-}
 
 .chicken{
   color: #FF9966;

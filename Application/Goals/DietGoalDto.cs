@@ -1,4 +1,5 @@
 using Application.Foods;
+using Application.Meals;
 using Domain;
 
 namespace Application.Goals
@@ -11,6 +12,7 @@ namespace Application.Goals
         public float carbs { get; set; }
         public float fats { get; set; }
         public ICollection<FoodDto> Foods  { get; set; } 
+        public ICollection<MealDto> Meals  { get; set; } 
        
     }
 }

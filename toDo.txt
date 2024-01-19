@@ -1,0 +1,4 @@
+na ftiaksw ta errors sta labels ,
+sto reload tou page ginontai ta faghta load 2 fores 
+kati paei lathos me sugxrwnismo to afairw kai otan mpainei to faghto kai sto reload,
+algorithmos ypologismoy faghtoy den einai accurate

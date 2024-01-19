@@ -8,6 +8,8 @@ export default class CommonStore {
 
     constructor(){
         makeAutoObservable(this);
+        
+     
 
         reaction(
             () => this.token,
@@ -19,6 +21,7 @@ export default class CommonStore {
                 }
             }
         )
+
     }
 
     setServerError(error: ServerError){
@@ -32,4 +35,11 @@ export default class CommonStore {
     setAppLoaded = () => {
         this.appLoaded = true
     }
+
+    clearJwtToken = () => {
+        localStorage.removeItem('jwt')
+    };
+
+ 
+    
 }
