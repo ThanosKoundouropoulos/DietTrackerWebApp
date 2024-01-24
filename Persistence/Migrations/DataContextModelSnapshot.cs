@@ -199,22 +199,22 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("calories")
+                    b.Property<float>("calories")
                         .HasColumnType("REAL");
 
-                    b.Property<double>("carbs")
+                    b.Property<float>("carbs")
                         .HasColumnType("REAL");
 
                     b.Property<string>("description")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("fats")
+                    b.Property<float>("fats")
                         .HasColumnType("REAL");
 
                     b.Property<string>("name")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("proteins")
+                    b.Property<float>("proteins")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
@@ -350,6 +350,29 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WeightIn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateRecorded")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Weight")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("WeightIn");
+                });
+
             modelBuilder.Entity("Domain.DietGoal", b =>
                 {
                     b.HasOne("Domain.AppUser", "AppUser")
@@ -448,9 +471,22 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WeightIn", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("WeightIns")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
                     b.Navigation("DietGoal");
+
+                    b.Navigation("WeightIns");
                 });
 
             modelBuilder.Entity("Domain.DietGoal", b =>

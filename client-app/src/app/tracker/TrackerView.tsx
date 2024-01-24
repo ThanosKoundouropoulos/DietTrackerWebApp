@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Button, Container, Grid, Header, Segment } from "semantic-ui-react";
+import { Button, Container, Grid, Header, Segment, Image } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 import { NavLink, useParams } from "react-router-dom";
 
@@ -47,10 +47,9 @@ export default observer(function TrackerView() {
 
   useEffect(() => {
     if (user && dietGoal) {
-      console.log('foodStore instance IN TRACKER diet goal load:');
+      console.log('*UseEffect loading foods, meals ,entries :');
       
       if (foods.length ===0) loadFoods();
-      console.log('foodS:' , foods.length);
       if (meals.length ===0) loadMeals();
       if (mealEntries.length ===0) loadMealEntries(dietGoal.id);
      
@@ -81,11 +80,26 @@ export default observer(function TrackerView() {
           <Grid.Column width='3'>
             
             <Segment textAlign="center" className="statsContainer">
+              {foods.length ===0 && mealEntries.length ===0 ? (
+                <>
+                  <Header className="global-font"  as={"h1"} color="teal">Add food or meals! </Header>
+                  <div style={{position:'absolute',top:150,right:5}}> 
+                    <Image src="/assets/stats.png" size="medium"  />
+                  </div>
+                  <div style={{position:'absolute',bottom:50,left:20}}> 
+                    <Header className="global-font" as={"h1"} color="teal">To display statistics !</Header>
+                  </div>
+                </>
+              ):(
+                <>
+                  <Header as='h2' inverted className="distHeader"> Calories Distribution </Header>
+                  <StatisticsChart  />
+                  <Header as='h1' inverted className="distHeader"> Target Percentage</Header>
+                  <DonutChart/>
+                </>
+              )}
             
-            <Header as='h1' inverted className="distHeader"> Calories Distribution </Header>
-            <StatisticsChart  />
-            <Header as='h1' inverted className="distHeader"> Target Percentage</Header>
-            <DonutChart/>
+           
             </Segment>  
           </Grid.Column>
             <Grid.Column width='10'>
@@ -127,14 +141,14 @@ export default observer(function TrackerView() {
       <Grid.Column width='3'>
       {!isCreating ? (
         <Segment textAlign="center"  className="mealsContainer">
-          <Header as='h1' inverted className="macros">My Meals</Header>
+          <Header as='h1' color="teal" className="macros global-font">My Meals</Header>
           {meals.length === 0 ? (
-            <Header  as='h2' inverted className="macros">No meals available, create your custom meals to use anytime you want !</Header>
+            <Header  as='h2' inverted className="macros global-font">No meals available, create your custom meals to use anytime you want !</Header>
           ) : (
             <MealsList/>
           )}
           
-          <Button onClick={() => {setCreating(true); console.log(isCreating);}}  positive content='Create Meal' className="mealBtn"></Button>
+          <Button onClick={() => {setCreating(true);}}  positive content='Create Meal' className="mealBtn global-font"></Button>
         </Segment> 
       ): <CreateForm/>}
       

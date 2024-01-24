@@ -85,5 +85,10 @@ export default class UserStore {
         });
       };
 
+    updateGoal =(dietGoal: DietGoal) => {
+        this.dietGoal = dietGoal; 
+    }
+
+
 
 }

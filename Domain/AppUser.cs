@@ -15,6 +15,7 @@ namespace Domain
         
         [JsonIgnore]
         public DietGoal DietGoal { get; set; }
+        public ICollection<WeightIn> WeightIns { get; set; } = new List<WeightIn>();
     }
 }
 

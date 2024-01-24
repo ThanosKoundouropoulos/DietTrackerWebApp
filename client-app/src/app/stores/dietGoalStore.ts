@@ -102,6 +102,29 @@ export default class DietGoalStore{
         }
     }
 
+    editDietGoal = async (dietGoal: DietGoalFormValues) => {
+        const uStore = store.userStore;
+        const dailyCalories = this.calculateCalorieIntake(Number(dietGoal.age), dietGoal.gender, Number(dietGoal.weight), Number(dietGoal.height), Number(dietGoal.activityLevel),dietGoal.plan);
+        const macros = this.splitCaloriesToMacros(await dailyCalories);
+       
+        try {
+            const newGoal = new DietGoal(dietGoal)
+            newGoal.calories =dailyCalories;
+            newGoal.proteins =macros.protein;
+            newGoal.carbs =macros.carbs;
+            newGoal.fats =macros.fat;
+            console.log("NEW GOAL :" ,newGoal);
+            
+            await agent.DietGoals.update(newGoal);   
+            runInAction(() => {
+              uStore.updateGoal(newGoal);
+              this.remainingDietGoal = newGoal; 
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     addFoodToDiet = async (selectedFood: Food,amount: number) => {
         const foodsStore = store.foodStore
         const convertedFood = {

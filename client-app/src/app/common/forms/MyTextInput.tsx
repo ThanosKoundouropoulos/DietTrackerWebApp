@@ -7,6 +7,7 @@ interface Props {
     name: string;
     label?: string;
     type?: string;
+    style?: React.CSSProperties;
 }
 
 export default function MyTextInput(props: Props){
@@ -17,7 +18,7 @@ export default function MyTextInput(props: Props){
             <label>{props.label}</label>
             <Input {...field} {...props} transparent />
             {meta.touched && meta.error ? (
-                <Label basic color="red"> {meta.error}</Label>
+                <Label  basic color="red"> {meta.error}</Label>
             ) : null}
 
         </Form.Field>

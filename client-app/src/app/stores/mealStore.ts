@@ -58,9 +58,6 @@ export default class MealStore{
         this.meals = meals.map((meal) => ({
           ...meal
         }));
-        meals.forEach(meal => {
-          console.log("meal:", meal.name);
-        });
       });
     } catch (error) {
       console.error(error);

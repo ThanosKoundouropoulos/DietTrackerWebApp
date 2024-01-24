@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
-import { Button, Container, Dropdown, Form, Header, Label, Segment } from "semantic-ui-react";
+import { Button, Container, Form, Header } from "semantic-ui-react";
 import { useStore } from "../stores/store";
-import { ErrorMessage, Formik } from "formik";
+import { Formik } from "formik";
 import * as Yup from 'yup';
 import {v4 as uuid} from 'uuid';
 import { genderOptions } from '../calculator/genderOptions'
@@ -9,23 +9,25 @@ import MyTextInput from "../common/forms/MyTextInput";
 import MySelectInput from "../common/forms/MySelectInput";
 import { activityLevelOptions } from "./activityLevelOptions";
 import { goalOptions } from "./goalOptions";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { DietGoalFormValues } from "../models/dietGoal";
+
+
+interface Props {
+    onClose: () => void;
+  }
 
 
 
 
+export default observer(function Calculator({ onClose }: Props) {
+    const {dietGoalStore,userStore} = useStore();
+    const {createGoal,editDietGoal } = dietGoalStore;
+    const {hasDietPlan } = userStore;
 
-
-
-export default observer(function Calculator() {
-    const {dietGoalStore} = useStore();
-    const {selectedDietGoal,createGoal,
-        loading,loadDietGoal,loadingInitial} = dietGoalStore;
-
-    const {id} = useParams();
-    const navigate = useNavigate();
+   
+  
     const [dietGoal,setDietGoal] = useState<DietGoalFormValues>(new DietGoalFormValues)
 
     const validationSchema = Yup.object({
@@ -36,50 +38,64 @@ export default observer(function Calculator() {
         activityLevel: Yup.string().required(),
         plan: Yup.string().required(),
     })
-    useEffect(() => {
-        if (id) loadDietGoal().then(dietGoal => setDietGoal(new DietGoalFormValues(dietGoal)))
-    }, [id ,loadDietGoal]);
-    //display the content of this ability in the form if it is available
-    //init state is either the selected activity we pass or the properties in an activity object
-    //?? if left is null use right as initial state
+
     
-   function handleFormSubmit(dietGoal: DietGoalFormValues){
-        if (dietGoal.id) {
-            dietGoal.id = uuid();
-            createGoal(dietGoal).then(() => navigate(`/tracker`));
+    function handleFormSubmit(dietGoal: DietGoalFormValues) {
+        if (hasDietPlan ) {
+            editDietGoal(dietGoal);
         } else {
             dietGoal.id = uuid();
-            createGoal(dietGoal).then(() => navigate(`/tracker`));
-           // updateActivity(activity).then(() => navigate(`/activities/${activity.id}`));
+            createGoal(dietGoal);
         }
+        onClose();
     }
+
+
     return (
         <Container className="calculator">
-            <Header content='Calculate your calorie plan !' sub color='teal'/>
             <Formik 
                 validationSchema={validationSchema}
                 enableReinitialize 
                 initialValues={dietGoal} 
                 onSubmit={values => handleFormSubmit(values)}>
                     {({handleSubmit,isValid,isSubmitting,dirty}) =>(
-                       <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' >
-                           <MyTextInput placeholder="Age" name="age"/>
-                            <MyTextInput placeholder="Weight" name="weight"/>
-                            <MyTextInput placeholder="Height" name="height"/>
-                            <MySelectInput label="Gender" options={genderOptions}   name='gender'  />
-                            <MySelectInput label="Activity Level" options={activityLevelOptions}   name='activityLevel' />
-                            <MySelectInput label="What are you planning to do ?" options={goalOptions}   name='plan' />
-                            <Button 
-                                
-                                loading={isSubmitting} floated='right' 
-                                positive type='submit' content='Submit'/>
-                            <Button as={Link}  to='/tracker' floated='right'  type='button' content='Cancel'/>
+                       <Form className='ui form ' onSubmit={handleSubmit} autoComplete='off' >
+                                <Header className="global-font" color="teal" as={"h2"}>Calculate/Update you diet plan !</Header>
+                                <div style={{position:'relative', top:-5, right:150}}> 
+                                    <MyTextInput placeholder="Age" name="age"/>
+                                </div> 
+                                <div style={{position:'relative', top:-45, right:0}}> 
+                                    <MyTextInput placeholder="Weight" name="weight"/>
+                                </div> 
+                                <div style={{position:'relative', top:-85, right:-150}}> 
+                                    <MyTextInput placeholder="Height" name="height"/>
+                                </div> 
+                                <div style={{position:'relative', top:-35}}> 
+                                    <MySelectInput label="Gender" options={genderOptions}   name='gender'  />
+                                </div> 
+                                <div style={{position:'relative', top:-18}}> 
+                                    <MySelectInput label="Activity Level" options={activityLevelOptions}   name='activityLevel' />
+                                </div> 
+                                <div style={{position:'relative', top:5}}> 
+                                    <MySelectInput label="What are you planning to do ?" options={goalOptions}   name='plan' />
+                                </div> 
+                                <div style={{position:'absolute', top:305, right:-120}}> 
+                                <Button
+                                    className="global-font"
+                                    disabled={!isValid || !dirty || isSubmitting}
+                                    loading={isSubmitting}
+                                    floated='right'
+                                    positive
+                                    type='submit'
+                                    content={hasDietPlan ? 'Update' : 'Create'}
+                                />
+                                </div> 
+                                <div style={{position:'absolute', top:305, right:200}}> 
+                                     <Button  className="global-font" as={Link}  to='/tracker' floated='left' inverted type='button' color="red" content='Cancel' onClick={onClose}/>
+                                </div>                         
                         </Form>
                 )}
-
-            </Formik>
-         
-        </Container>
-      
+            </Formik> 
+        </Container>    
     )
   })

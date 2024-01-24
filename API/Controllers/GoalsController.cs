@@ -43,11 +43,10 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditDietGoals(Guid id,DietGoal dietGoal)
-        {      
-            dietGoal.Id = id;                                          
-            return HandleResult(await Mediator.Send(new Edit.Command {dietGoal = dietGoal}));
+        [HttpPut("edit")]
+        public async Task<IActionResult> EditDietGoals(DietGoal dietGoal)
+        {                                               
+            return HandleResult(await Mediator.Send(new Edit.Command {DietGoal = dietGoal}));
         }
 
        

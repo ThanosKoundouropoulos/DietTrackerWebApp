@@ -5,6 +5,7 @@ import UserStore from "./userStore";
 import DietGoalStore from "./dietGoalStore";
 import FoodStore from "./foodStore";
 import MealStore from "./mealStore";
+import WeightStore from "./weightStore";
 
 //This file is the store that is goin to store our stores 
 interface Store {
@@ -15,6 +16,7 @@ interface Store {
     dietGoalStore: DietGoalStore;
     foodStore: FoodStore;
     mealStore: MealStore;
+    weightStore: WeightStore;
    
 
 }
@@ -26,7 +28,8 @@ export const store: Store ={
     modalStore: new ModalStore(),
     foodStore: new FoodStore(),
     mealStore: new MealStore(),
-    dietGoalStore: new DietGoalStore()
+    dietGoalStore: new DietGoalStore(),
+    weightStore: new WeightStore()
 
 }
 

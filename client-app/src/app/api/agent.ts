@@ -7,6 +7,7 @@ import { User, UserFormValues } from "../models/user";
 import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
 import { Food } from "../models/Food";
 import { Meal, MealFormValues } from "../models/meal";
+import { Weight, WeightFormValues } from "../models/weight";
 
 
 
@@ -82,7 +83,7 @@ const requests = {
 const DietGoals ={
     details: (id:string) => requests.get<DietGoal>(`/goals/${id}`),
     create: (dietGoal: DietGoalFormValues) => requests.post<void>('/goals',dietGoal),
-    update: (dietGoal: DietGoalFormValues) => requests.put<void>(`/goals/${dietGoal.id}`,dietGoal),
+    update: (dietGoal: DietGoalFormValues) => requests.put<void>(`/goals/edit`,dietGoal),
     delete: (id:string) => requests.del<void>(`/goals/${id}`),
     deleteMealEntry: (goalId: string, mealId: string) => requests.del<void>(`/meals/${goalId}/${mealId}/deleteMealEntry`),
     deleteFoodEntry: (goalId: string, foodId: string) => requests.del<void>(`/foods/${goalId}/${foodId}/delete`)
@@ -102,6 +103,12 @@ const Meals ={
     add: (mealId: string) =>requests.post<Meal>(`/meals/${mealId}/add`,{}) 
 }
 
+const WeightIns = {
+    create: (weight: WeightFormValues) => requests.post<void>('/weight',weight),
+    delete: (id:string) => requests.del<void>(`/weight/${id}`),
+    list: () => requests.get<Weight[]>('/weight'),
+}
+
 const Account = {
     current: () => requests.get<User>('/account'),
     login: (user: UserFormValues) => requests.post<User>('/account/login',user),
@@ -114,7 +121,8 @@ const agent = {
     Account,
     DietGoals,
     Foods,
-    Meals
+    Meals,
+    WeightIns
 }
 
 export default agent;

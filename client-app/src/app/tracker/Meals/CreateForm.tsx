@@ -54,14 +54,14 @@ export default observer(function CreateForm() {
 
         
         <Container textAlign='center'  className="mealForm">
-            <Header as='h2' content='Create your custom meal' color='green'/>
+            <Header as='h2' className="global-font" content='Create your custom meal' color='green'/>
             <Formik 
                 validationSchema={validationSchema}
                 enableReinitialize 
                 initialValues={meal} 
                 onSubmit={values => handleFormSubmit(values)}>
                     {({handleSubmit,isValid,isSubmitting,dirty}) =>(
-                       <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' >
+                       <Form className='ui form global-font' onSubmit={handleSubmit} autoComplete='off' >
                            <MyTextInput  placeholder="Food name" name="name"/>
                             <MyTextArea placeholder="Description" name="description" style={{backgroundColor: "#455d7a" ,width: '250px',height:'100px',resize:'none'}}/>
                             <GiFlame className="icons-flame" size="30px" />
@@ -80,13 +80,17 @@ export default observer(function CreateForm() {
                             <Container className="macrosInput-fats">
                                 <MyMacrosInput placeholder="Fats" name="fats"/>
                             </Container>
-                          
+                            <div style={{position:'absolute',bottom:50,right:5}}> 
                             <Button 
+                                className="global-font"
                                 disabled={!isValid || !dirty}
                                 loading={isSubmitting} floated='left' 
                                 positive type='submit' content='Submit'
                             />
-                            <Button as={Link} onClick={() => setCreating(false)} to='/tracker'  floated='right'  type='button' content='Cancel' color="red"/>
+                             </div>
+                             <div style={{position:'absolute',bottom:50,left:15}}> 
+                                <Button className="global-font" as={Link} onClick={() => setCreating(false)} to='/tracker'  floated='right'  type='button' content='Cancel' color="red"/>
+                                </div>
                         </Form>
                 )}
 

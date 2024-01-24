@@ -41,7 +41,7 @@ export default observer(function MealListItem({ meal }: Props) {
   return (
     <>
         <Segment className="meal-wrapper">
-            <Header as="h1" floated="left" className="macros" size="medium">
+            <Header as="h1" floated="left" className="macros global-font" size="medium">
             {meal.name}
             </Header>
             <Button icon="add" floated="right" inverted color="green" className="addFoodButton" onClick={handleAddMeal} />
@@ -52,7 +52,7 @@ export default observer(function MealListItem({ meal }: Props) {
         </Segment>
 
         {openDetails && (
-            <Card className="meal-details-card">
+            <Card className="meal-details-card global-font">
             <Card.Content>
                 <Card.Header ><h1>{meal.name}</h1></Card.Header>
                 <CardDescription><h3>{meal.description}</h3></CardDescription>
@@ -62,7 +62,7 @@ export default observer(function MealListItem({ meal }: Props) {
                 <Card.Meta>Fats: {meal.fats}</Card.Meta>
             </Card.Content>
             <Card.Content extra>
-                <Button negative onClick={() => setOpenDetails(false)}>
+                <Button className='global-font' negative onClick={() => setOpenDetails(false)}>
                 Close
                 </Button>
             </Card.Content>

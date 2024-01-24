@@ -18,12 +18,12 @@ export default observer( function MacrosHeader() {
 
     return (
       <>
-          <Container  className="macrosHeader">
-                <Header as='h2' floated="left"   className="macros"> Your Goal :</Header>
-                <Header as='h1' floated="left"   className="macrosC"> <GiFlame className="icons flame" size="35px" /> {round(dietGoal!.calories,1)}</Header>
-                <Header  floated="left"  as='h2'   className="macrosM">  <GiChickenLeg className="icons chicken" size="25px" /> {round(dietGoal!.proteins,1)}</Header>
-                <Header floated="left" as='h2'   className="macrosM"> <FaBreadSlice className="icons bread" size="25px"/>{round(dietGoal!.carbs,1)}</Header>
-                <Header floated="left" as='h2'   className="macrosM"><GiAvocado className="icons avocado" size="25px"/> {round(dietGoal!.fats,1)}</Header> 
+          <Container  className="macrosHeader global-font">
+                <Header as='h2' floated="left"   className="macros global-font"> Your Goal :</Header>
+                <Header as='h1' floated="left"   className="macrosC global-font"> <GiFlame className="icons flame" size="30px" /> {round(dietGoal!.calories,1)}</Header>
+                <Header  floated="left"  as='h2'   className="macrosM global-font">  <GiChickenLeg className="icons chicken" size="25px" /> {round(dietGoal!.proteins,1)}</Header>
+                <Header floated="left" as='h2'   className="macrosM global-font"> <FaBreadSlice className="icons bread" size="25px"/>{round(dietGoal!.carbs,1)}</Header>
+                <Header floated="left" as='h2'   className="macrosM global-font"><GiAvocado className="icons avocado" size="25px"/> {round(dietGoal!.fats,1)}</Header> 
             </Container> 
          
       </>

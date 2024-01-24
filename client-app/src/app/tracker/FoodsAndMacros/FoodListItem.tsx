@@ -27,22 +27,22 @@ export default observer(function FoodListItem({ food }: Props) {
   };
 
   return (
-    <Segment  className="food-wrapper">
-      <Header as='h1' floated="left" className="macros" size='medium'>{food.amountConsumed!*100 } gr</Header>
-      <Header as='h1' floated="left" className="macros" size='medium'>{food.name}</Header>
-      <Header as='h1' floated="left" className="macros">
-        <GiFlame className="icons flame" size="35px" /> {round(food.calories, 1)}
+    <Segment  className="food-wrapper ">
+      <Header as='h1' floated="left" className="macros global-font" size='medium'>{food.amountConsumed!*100 } gr</Header>
+      <Header as='h1' floated="left" className="macros global-font" size='medium'>{food.name}</Header>
+      <Header as='h1' floated="left" className="macros global-font">
+        <GiFlame className="icons flame " size="35px" /> {round(food.calories, 1)}
       </Header>
-      <Header floated="left" as='h3' className="macros">
+      <Header floated="left" as='h3' className="macros global-font">
         <GiChickenLeg className="icons chicken" size="25px" /> {round(food.proteins, 1)}
       </Header>
-      <Header floated="left" as='h3' className="macros">
+      <Header floated="left" as='h3' className="macros global-font">
         <FaBreadSlice className="icons bread" size="25px" />{round(food.carbs, 1)}
       </Header>
-      <Header floated="left" as='h3' className="macros">
+      <Header floated="left" as='h3' className="macros global-font">
         <GiAvocado className="icons avocado" size="25px" /> {round(food.fats, 1)}
       </Header>
-      <Button inverted color='red' className="macros" onClick={handleDelete} >Delete</Button>
+      <Button inverted color='red' className="macros global-font" onClick={handleDelete} >Delete</Button>
   </Segment>
   );
 })

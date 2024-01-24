@@ -29,21 +29,21 @@ export default observer(function MealEntryItem({ meal }: Props) {
 
   return (
     <Segment  className="food-wrapper">
-      <Header as='h1' floated="left" className="macros" size='medium'>{meal.quantity} entries of</Header>
-      <Header as='h1' floated="left" className="macros" size='medium'>{meal.name}</Header>
-      <Header as='h1' floated="left" className="macros">
+      <Header as='h1' floated="left" className="macros global-font" size='medium'>{meal.quantity} entries of</Header>
+      <Header as='h1' floated="left" className="macros global-font" size='medium'>{meal.name}</Header>
+      <Header as='h1' floated="left" className="macros global-font">
         <GiFlame className="icons flame" size="35px" /> {round(meal.calories, 1)}
       </Header>
-      <Header floated="left" as='h3' className="macros">
+      <Header floated="left" as='h3' className="macros global-font">
         <GiChickenLeg className="icons chicken" size="25px" /> {round(meal.proteins, 1)}
       </Header>
-      <Header floated="left" as='h3' className="macros">
+      <Header floated="left" as='h3' className="macros global-font">
         <FaBreadSlice className="icons bread" size="25px" />{round(meal.carbs, 1)}
       </Header>
-      <Header floated="left" as='h3' className="macros">
+      <Header floated="left" as='h3' className="macros global-font">
         <GiAvocado className="icons avocado" size="25px" /> {round(meal.fats, 1)}
       </Header>
-      <Button inverted color='red' className="macros" onClick={handleDelete} >Delete</Button>
+      <Button inverted color='red' className="macros global-font" onClick={handleDelete} >Delete</Button>
   </Segment>
   );
 })

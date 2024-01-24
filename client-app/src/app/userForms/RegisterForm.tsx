@@ -1,6 +1,6 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import { values } from "mobx";
-import { Button, Header, Label } from "semantic-ui-react";
+import { Button, Container, Header, Label } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import * as Yup from 'yup';
 import MyTextInput from "../common/forms/MyTextInput";
@@ -23,20 +23,31 @@ export default observer(function RegisterForm(){
         >
             {({handleSubmit, isSubmitting,errors, isValid,dirty}) => (
                 <Form className="ui form error" onSubmit={handleSubmit} autoComplete="off">
-                    <Header as='h2' content='Sign Up to Reactivities' color="teal" textAlign="center"/>
-                    <MyTextInput placeholder="Username" name="username"/>
-                    <MyTextInput placeholder="Display Name" name="displayName"/>
-                    <MyTextInput placeholder="Email" name="email"/>
-                    <MyTextInput placeholder="Password" name="password" type='password'/>
-                    <ErrorMessage
-                        name="error"render={() =>
-                        <Label errors={errors.error}/>}
-                    />
-                    <Button 
-                        disabled={!isValid || !dirty || isSubmitting}
-                        loading={isSubmitting} 
-                        positive content='Register' 
-                        type="submit" fluid/>
+                    <Container className='modalContainerRegister'>
+                        <Header className="global-font" as='h2' content='Sign Up to Reactivities' color="teal" textAlign="center"/>
+                        <div style={{position:'relative', top:-5}}>
+                            <MyTextInput placeholder="Username" name="username"/>
+                        </div>
+                        <div style={{position:'relative', top:1}}>
+                            <MyTextInput placeholder="Display Name" name="displayName"/>
+                        </div>
+                        <div style={{position:'relative', top:5}}>
+                            <MyTextInput placeholder="Email" name="email"/>
+                        </div>
+                        <div style={{position:'relative', top:10}}> 
+                            <MyTextInput placeholder="Password" name="password" type='password'/>
+                        </div>       
+                        <ErrorMessage
+                            name="error"render={() =>
+                            <Label errors={errors.error}/>}
+                        />
+                        <Button 
+                            disabled={!isValid || !dirty || isSubmitting}
+                            loading={isSubmitting} 
+                            positive content='Register' 
+                            type="submit" />
+                    </Container>
+                    
                 </Form>
             )}
 

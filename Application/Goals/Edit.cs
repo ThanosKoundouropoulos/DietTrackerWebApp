@@ -5,6 +5,8 @@ using MediatR;
 using Persistence;
 using Application.Goals;
 using Application.Core;
+using Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Goals
 {
@@ -12,43 +14,59 @@ namespace Application.Goals
     {
          public class Command : IRequest<Result<Unit>>
         {
-            public DietGoal dietGoal { get; set; }
+            public DietGoal DietGoal { get; set; }
         }
 
           public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.dietGoal).SetValidator(new GoalValidator());
+                RuleFor(x => x.DietGoal).SetValidator(new GoalValidator());
             }
         }
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly DataContext _context;
+        private readonly IUserAccessor _userAccessor;
+
+        public Handler(DataContext context, IUserAccessor userAccessor)
         {
-            private readonly DataContext _context;
-            private readonly IMapper _mapper;
-           
-            public Handler(DataContext context, IMapper mapper)
+            _userAccessor = userAccessor;
+            _context = context;
+        }
+
+       public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x =>
+                x.UserName == _userAccessor.GetUsername());
+
+            if (user == null)
+                return Result<Unit>.Failure("User not found");
+
+            var existingDietGoal = await _context.DietGoals
+                .FirstOrDefaultAsync(dg => dg.AppUserId == user.Id);
+
+            if (existingDietGoal == null)
+                return Result<Unit>.Failure("DietGoal not found");
+
+            existingDietGoal.calories = request.DietGoal.calories;
+            existingDietGoal.proteins = request.DietGoal.proteins;
+            existingDietGoal.carbs = request.DietGoal.carbs;
+            existingDietGoal.fats = request.DietGoal.fats;
+
+            try
             {
-                _mapper = mapper;
-                _context = context;
+                var result = await _context.SaveChangesAsync(cancellationToken);
+                if (result > 0)
+                    return Result<Unit>.Success(Unit.Value);
+                else
+                    return Result<Unit>.Failure("No changes were made to DietGoal");
             }
-
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            catch (Exception ex)
             {
-                var dtgoal = await _context.DietGoals.FindAsync(request.dietGoal.Id);
-
-
-                if(dtgoal == null) return null;
-               
-                _mapper.Map(request.dietGoal,dtgoal);
-                var result =await _context.SaveChangesAsync()>0;
-
-                if(!result) return Result<Unit>.Failure("Failed to update dietgoal");
-                
-                return Result<Unit>.Success(Unit.Value);
-
-
+                return Result<Unit>.Failure($"Failed to update DietGoal. Error: {ex.Message}");
             }
         }
+    }
     }
 }

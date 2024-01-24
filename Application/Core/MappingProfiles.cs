@@ -3,6 +3,7 @@ using Application.Foods;
 using AutoMapper;
 using Domain;
 using Application.Meals;
+using Application.WeightIns;
 
 namespace Application.Core
 {
@@ -16,6 +17,7 @@ namespace Application.Core
             CreateMap<DietGoalFoods, FoodDto>();
             CreateMap<Meal, MealDto>();
             CreateMap<DietGoalMeals, MealDto>();
+            CreateMap<WeightIn, WeightInDto>();
         }
 
        
