@@ -15,7 +15,7 @@ export default observer(function Progress() {
 
     useEffect(() => {
         
-     // if (weightIns.length === 0) loadWeights();
+     if (weightIns.length === 0) loadWeights();
     },[loadWeights,weightIns])
   
  

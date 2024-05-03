@@ -115,12 +115,13 @@ export default observer(function HomePage(){
                 </div>
                 
                 {userStore.isLoggedIn ? (
-                    <>
-                        <Header as='h2' inverted content='Welcome to Diet Tracker' />
-                        <Button as={Link} to='/tracker' size="huge" inverted>
+                    <div  className="global-font"  style={{position:"absolute",right:130,top:70}}>
+                        <Button  className="global-font"   as={Link} to='/tracker' size="huge" inverted>
                               Go to Main Page!
                         </Button>
-                    </>
+                    </div>
+                       
+                  
                 ) : (
 
                         <Container className="homeButtonsContainer">

@@ -69,23 +69,31 @@ export default observer(function WeightHistory() {
                 onSubmit={values => handleSubmit(values)}>
                     {({handleSubmit,isValid,isSubmitting,dirty}) =>(
                         <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' >
-                           <Container className="weightInput">
-                              <MyMacrosInput  placeholder="Weight" name="weight" />
-                           </Container>
-                          
-                            <MyDateInput   
-                                placeholder='Date'
-                                name='date' 
-                                style={{backgroundColor: "#455d7a" ,width:'200px',height:'100px'}}                               
-                             />
-                          
-                          
-                            <Button 
-                                disabled={isSubmitting || !dirty || !isValid}
-                                loading={isSubmitting} floated='right' 
-                                positive type='submit' content='Submit'
+                          <div className="weightEntryForm"  >
+                            <h3  className=" global-font" style={{position:"relative",top:50,right:30}} >Add weight:</h3>
+                            <Container className="weightInput">
+                                <MyMacrosInput  placeholder="Weight" name="weight" />
+                            </Container>
+                            <h3  className=" global-font" style={{position:"relative",top:30}} >Pick date :</h3>
+                              <div  style={{position:"absolute" ,top:170,right:35 , boxShadow: '10px 0px 10px rgba(0, 0, 0, 0.2)',backgroundColor:"#233142" ,color:"#233142"}}>
+                                <MyDateInput   
+                                    placeholder='Date'
+                                    name='date'                              
                                 />
-                              <Button content="Cancel" onClick={onCancel} color="red" />
+                               </div>
+                              <div style={{position:"absolute" ,top:250,right:30}}>
+                                <Button 
+                                    disabled={isSubmitting || !dirty || !isValid}
+                                    loading={isSubmitting} floated='right' 
+                                    positive type='submit' content='Submit'
+                                    className="global-font"
+                                />
+                              </div>
+                              <div style={{position:"absolute" ,top:250,left:20}}>
+                                <Button inverted className="global-font" content="Cancel" onClick={onCancel} color="red" />
+                              </div>
+                          </div>
+                          
                         </Form>
                     )}
             </Formik>  

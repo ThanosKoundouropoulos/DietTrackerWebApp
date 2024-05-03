@@ -8,7 +8,7 @@ import { format, parseISO } from "date-fns";
 
 
 
-export default class MealStore{
+export default class WeightStore{
     weightIns: Weight[] = [];
     isCreating = false;
     loading = false;
@@ -19,6 +19,7 @@ export default class MealStore{
 
     createWeightIn = async (weight: WeightFormValues) => {
       console.error('Weight info ', weight.date, weight.weight);
+      
       try {
         this.setCreating(true);
           await agent.WeightIns.create(weight);
@@ -47,15 +48,20 @@ export default class MealStore{
             this.loading = true;
             const weights = await agent.WeightIns.list();
             weights.forEach(weight =>{
-              console.error('Weight info list 1', weight.date , weight.weight);
+              console.error('Weight info list 1 iso', weight.date?.toISOString() , weight.weight);
               weight.date = new Date(weight.date!);
               console.error('Weight info list 2', weight.date , weight.weight);
             })
             runInAction(() => {
-              this.weightIns = this.sortWeightsByDate(weights);
-              this.weightIns.forEach(element => {
+             // this.weightIns = this.sortWeightsByDate(weights);
+              this.weightIns = weights.map((win) => ({
+                ...win,
+                weight: win.weight,
+                date: win.date
+            
+              }))
             });
-            });
+         
           } catch (error) {
             console.error('Error loading weights:', error);
           } finally {
@@ -69,8 +75,8 @@ export default class MealStore{
     };
   
 
-    removeWeight = (mealId: string) => {
-      this.weightIns = this.weightIns.filter((weight) => weight.id !== weight.id);
+    removeWeight = (weightId: string) => {
+      this.weightIns = this.weightIns.filter((weight) => weight.id !== weightId);
     };
   
     setCreating = (state: boolean) => {

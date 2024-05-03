@@ -2,8 +2,8 @@ import { RouteObject, createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import LoginForm from "../userForms/LoginForm";
 import TrackerView from "../tracker/TrackerView";
-import Calculator from "../calculator/Calculator";
 import Progress from "../progress/Progress";
+import Calculator from "../calculator/Calculator";
 
 
 

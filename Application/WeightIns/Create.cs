@@ -34,9 +34,14 @@ namespace Application.WeightIns
                     x.UserName == _userAccessor.GetUsername());
 
                 if (user == null) return Result<Unit>.Failure("User not found");
-
+                 var weightin = new WeightIn
+                {
+                    AppUser = user,
+                    Weight = request.WeightIn.Weight,
+                    DateRecorded = request.WeightIn.DateRecorded,
+                };
                 request.WeightIn.AppUser = user;
-                Console.Write("Date in Handler: " ,request.WeightIn.DateRecorded);
+                Console.WriteLine("Date in Handler: " + request.WeightIn.DateRecorded);
                 _context.WeightIn.Add(request.WeightIn);
                 user.WeightIns.Add(request.WeightIn);
 

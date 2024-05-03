@@ -124,13 +124,13 @@ export default observer(function TrackerView() {
                       
                   ) : (
                     <Container className="noGoalContainer">
-                      <Header as='h3' inverted >
-                              You don't have a diet plan created,<br/> 
-                              Create one and start tracking your macros immediately!
-                      </Header>
-                      <Button as={NavLink} to='/calculator' positive content='Create Diet Plan'>
-                        
-                      </Button>
+                      <div style={{position:'relative',top:150}}>
+                        <Header className="global-font"  as='h2' inverted >
+                                You don't have a diet plan created,<br/> 
+                                Create one at the <span style={{ color: "teal" }}>Calculator</span> tab <br/>  and start tracking your macros immediately!
+                        </Header>
+                      </div>
+                    
                     </Container>  
                   )}
                 </Grid.Row>             

@@ -232,16 +232,23 @@ export default class DietGoalStore{
     clearDietGoal = async (goalId: string) => {
       
       const foodStore = store.foodStore;
+      const mealStore = store.mealStore;
       try {
         runInAction(() =>  this.loading = true);
         for (const food of foodStore.foods) {
-        
           await agent.DietGoals.deleteFoodEntry(goalId, food.id);
-  
           runInAction(() => foodStore.removeFood(food.id));
           this.addBackToDietGoal(food);
           runInAction(() =>  this.loading = false);
         }
+
+        for (const meal of mealStore.mealEntries) {
+          await agent.DietGoals.deleteMealEntry(goalId, meal.id);
+          runInAction(() => mealStore.removeMealEntry(meal.id));
+          this.addBackToDietGoal(meal);
+          runInAction(() =>  this.loading = false);
+        }
+        
       } catch (error) {
         console.error('Error clearing diet goal:', error);
         runInAction(() =>  this.loading = false);
