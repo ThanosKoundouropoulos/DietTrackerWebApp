@@ -22,13 +22,15 @@ export default observer( function RemainingMacros() {
       };
 
     return (
+     
       <>
+       {remainingDietGoal && (
           <Container  className="RemainingMacros">
                 <Header as='h4' floated="left"   className="macros global-font">  Remaining :</Header>
-                <Header as='h3' floated="left"   className="macrosC global-font">  {round(remainingDietGoal!.calories,1)}</Header>
-                <Header  floated="left"  as='h3'   className="macrosM global-font">   {round(remainingDietGoal!.proteins,1)}</Header>
-                <Header floated="left" as='h3'   className="macrosCa global-font"> {round(remainingDietGoal!.carbs,1)}</Header>
-                <Header floated="left" as='h3'   className="macrosF global-font">{round(remainingDietGoal!.fats,1)}</Header>
+                <Header as='h3' floated="left"   className="macrosC global-font">  {round(remainingDietGoal.calories,1)}</Header>
+                <Header  floated="left"  as='h3'   className="macrosM global-font">   {round(remainingDietGoal.proteins,1)}</Header>
+                <Header floated="left" as='h3'   className="macrosCa global-font"> {round(remainingDietGoal.carbs,1)}</Header>
+                <Header floated="left" as='h3'   className="macrosF global-font">{round(remainingDietGoal.fats,1)}</Header>
                 <Button 
                     floated="right" 
                     color='red' 
@@ -39,8 +41,9 @@ export default observer( function RemainingMacros() {
                     Clear
                 </Button> 
             </Container> 
-         
+          )}
       </>
+   
        
       );
 })

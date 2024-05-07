@@ -35,7 +35,10 @@ export default observer(function LoginForm() {
                 name="error"render={() =>
                 <Label style={{marginBottom: 10}} basic color="red" content={errors.error}/>}
                 />
-                <Button  disabled={!isValid || !dirty || isSubmitting} loading={isSubmitting} positive content='Login' type="submit" />
+                <div style={{position:'absolute'}}>
+                  <Button  disabled={!isValid || !dirty || isSubmitting} loading={isSubmitting} positive content='Login' type="submit" />
+                </div>
+                
             </Form>
           </Container>
          

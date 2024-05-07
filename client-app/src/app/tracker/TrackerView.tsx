@@ -26,7 +26,7 @@ import CreateForm from "./Meals/CreateForm";
 
 export default observer(function TrackerView() {
 
-  const { userStore ,foodStore ,dietGoalStore ,mealStore} = useStore();
+  const { foodStore ,dietGoalStore ,mealStore} = useStore();
   const {loadFoods,foods} = foodStore;
   const {isCreating,setCreating,meals,loadMeals,mealEntries,loadMealEntries} = mealStore;
   const {addFoodToDiet} = dietGoalStore;
@@ -43,19 +43,20 @@ export default observer(function TrackerView() {
       getUser();
     }
     
-  },[getUser,user])*/
+  },[getUser,user])
+  
+  
+  
+  */
 
   useEffect(() => {
-    if (user && dietGoal) {
-      console.log('*UseEffect loading foods, meals ,entries :');
-      
+    
       if (foods.length ===0) loadFoods();
       if (meals.length ===0) loadMeals();
-      if (mealEntries.length ===0) loadMealEntries(dietGoal.id);
-     
-    }else{
-      console.log('NO USER');
-    }
+      if (dietGoal) {
+        if (mealEntries.length ===0) loadMealEntries(dietGoal.id);
+      }
+   
   }, [user, dietGoal, loadFoods,loadMeals,loadMealEntries]);
 
 

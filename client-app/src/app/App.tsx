@@ -14,6 +14,7 @@ function App() {
   const location = useLocation();
   const {commonStore, userStore} = useStore();
   useEffect(() => {
+    console.log('* 1App UseEffect loading ');
     if (commonStore.token) {
       userStore.getUser().finally(() => commonStore.setAppLoaded())
     } else {

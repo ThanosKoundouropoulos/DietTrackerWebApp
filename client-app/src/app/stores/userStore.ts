@@ -64,13 +64,13 @@ export default class UserStore {
     getUser = async () => {
         try {
             const user = await agent.Account.current();
+            console.log("1User : " ,user?.displayName ,"Goal : " , user?.dietGoal?.calories );
             runInAction(() =>{ 
                 this.user = user;
                 this.dietGoal= user.dietGoal!;
                 this.loadRemainingDietGoal(this.dietGoal!);
             })
             
-            console.log("1User : " ,this.user?.displayName ,"Goal : " , this.user?.dietGoal?.calories );
         } catch (error) {
             console.log(error);
         }
