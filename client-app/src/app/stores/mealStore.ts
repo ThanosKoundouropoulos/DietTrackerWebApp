@@ -26,9 +26,10 @@ export default class MealStore{
           newMeal.carbs =Number(meal.carbs);
           newMeal.fats =Number(meal.fats);
           newMeal.quantity =1;
-          console.log("NEW Meal info  :" ,newMeal.description,newMeal.calories,newMeal.proteins,newMeal.carbs,newMeal.fats);
+          console.log("NEW Meal info  :" ,newMeal.description,newMeal.calories,newMeal.proteins,newMeal.carbs,newMeal.fats + 'IDDD ' + newMeal.id);
           await agent.Meals.create(meal);  
-          runInAction(() =>this.meals.push(newMeal));  
+          this.loadMeals();
+          //runInAction(() =>this.meals.push(newMeal));  
         
       } catch (error) {
           console.log(error);

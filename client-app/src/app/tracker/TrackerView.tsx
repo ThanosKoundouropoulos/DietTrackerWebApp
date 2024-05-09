@@ -29,7 +29,7 @@ export default observer(function TrackerView() {
   const { foodStore ,dietGoalStore ,mealStore} = useStore();
   const {loadFoods,foods} = foodStore;
   const {isCreating,setCreating,meals,loadMeals,mealEntries,loadMealEntries} = mealStore;
-  const {addFoodToDiet} = dietGoalStore;
+  const {addFoodToDiet,remainingDietGoal} = dietGoalStore;
   const {userStore : {user,dietGoal,getUser}} = useStore();
   const [results, setResults] = useState<Food[]>([]);
 
@@ -50,24 +50,16 @@ export default observer(function TrackerView() {
   */
 
   useEffect(() => {
-    
-      if (foods.length ===0) loadFoods();
+      
       if (meals.length ===0) loadMeals();
-      if (dietGoal) {
+      if (dietGoal && remainingDietGoal) {
+        if (foods.length ===0) loadFoods();
         if (mealEntries.length ===0) loadMealEntries(dietGoal.id);
       }
    
-  }, [user, dietGoal, loadFoods,loadMeals,loadMealEntries]);
+  }, [user, dietGoal,remainingDietGoal, loadFoods,loadMeals,loadMealEntries]);
 
 
-
-  
-  /*useEffect(() => {
-   
-    loadDietGoal().then(dietGoal => setDietGoal(dietGoal!)) 
-    console.log("LOAD GOAL 1 :" ,dietGoal.calories,user?.hasDietPlan );
-    console.log("LOAD GOAL 2 :" ,user?.dietGoal?.id ,user?.displayName );
-  }, [id ,loadDietGoal]);*/
 
     
   if (foodStore.loadingInitial) return <LoadingComponent content='Loading app'/>

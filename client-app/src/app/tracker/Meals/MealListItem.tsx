@@ -18,10 +18,10 @@ function round(value: number, precision: number) {
 
 
 export default observer(function MealListItem({ meal }: Props) {
-  const { dietGoalStore,userStore,mealStore} = useStore();
+  const { dietGoalStore,mealStore} = useStore();
   const {addMealToDiet} = dietGoalStore;
   const {deleteMeal} = mealStore;
-  const {dietGoal} = userStore
+  
 
   const [openDetails, setOpenDetails] = useState(false);
 

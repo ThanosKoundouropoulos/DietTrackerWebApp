@@ -12,6 +12,7 @@ export default observer( function RemainingMacros() {
     const {userStore : {dietGoal}} = useStore();
     const {dietGoalStore : {remainingDietGoal,clearDietGoal,loading}} = useStore();
     const {foodStore : {foods}} = useStore();
+    const {mealStore : {mealEntries}} = useStore();
 
     const handleClearDietGoal = async () => {
         try {
@@ -37,7 +38,7 @@ export default observer( function RemainingMacros() {
                     className="clearBtn global-font"
                     onClick={handleClearDietGoal}
                     loading={loading} 
-                    disabled={foods.length === 0}>
+                    disabled={foods.length === 0 && mealEntries.length === 0}>
                     Clear
                 </Button> 
             </Container> 

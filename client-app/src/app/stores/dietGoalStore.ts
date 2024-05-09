@@ -163,34 +163,36 @@ export default class DietGoalStore{
       };
 
     addMealToDiet = async (selectedMeal: Meal) => {
-      const mealStore = store.mealStore
-      if (!selectedMeal.quantity) {
-        selectedMeal.quantity =1;
-      }
+      const mealStore = store.mealStore;
       
       try {
-        
-        const meal = mealStore.mealEntries.find((meal) => meal.id === selectedMeal.id);
+        const mealEntry = mealStore.mealEntries.find((meal) => meal.id === selectedMeal.id);
+        if (!selectedMeal.quantity) {
+          selectedMeal.quantity = 1;
+        }
         await agent.Meals.add(selectedMeal.id);
-        if (!meal) {
-          console.log(`Added meal to diet: ${selectedMeal.name} , with qunatity :  ${selectedMeal.quantity}`);
-          runInAction(() => {mealStore.mealEntries.push(selectedMeal);});
+        if (!mealEntry) {
+          console.log(`Added meal to diet: ${selectedMeal.name} with quantity: ${selectedMeal.quantity}`);
+          const newMealEntry = { ...selectedMeal }; 
+          newMealEntry.quantity = 1; 
+          runInAction(() => {
+            mealStore.mealEntries.push(newMealEntry); 
+          });
           this.subtractFromDietGoal(selectedMeal);
-        }else{
-            console.log(`Added meal to diet 2: ${selectedMeal.name} , with qunatity :  ${meal.quantity}`);
-            runInAction(() => {
-              meal.calories = (selectedMeal.calories || 0) * (meal.quantity || 0) ;
-              meal.proteins = (selectedMeal.proteins || 0) * (meal.quantity || 0);
-              meal.carbs = (selectedMeal.carbs || 0) * (meal.quantity || 0) ;
-              meal.fats = (selectedMeal.fats || 0) * (meal.quantity || 0);
-              meal.quantity +=1;
-            });
-            this.subtractFromDietGoal(meal);
-        }    
-        console.log(`meals: ${mealStore.mealEntries.length}`);
-        
+        } else {
+          console.log(`Updated meal in diet: ${selectedMeal.name} with quantity: ${mealEntry.quantity + 1}`);
+          runInAction(() => {
+            mealEntry.quantity += 1;
+            mealEntry.calories += selectedMeal.calories;
+            mealEntry.proteins += selectedMeal.proteins;
+            mealEntry.carbs += selectedMeal.carbs;
+            mealEntry.fats += selectedMeal.fats;
+          });
+          this.subtractFromDietGoal(selectedMeal);
+        }
+        console.log(`Meals: ${mealStore.mealEntries.length}`);
       } catch (error) {
-        console.error('Error adding food to diet:', error);
+        console.error('Error adding meal to diet:', error);
         throw error;
       }
     };
