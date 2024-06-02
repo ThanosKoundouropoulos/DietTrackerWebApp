@@ -18,6 +18,7 @@ namespace Application.Core
             CreateMap<Meal, MealDto>();
             CreateMap<DietGoalMeals, MealDto>();
             CreateMap<WeightIn, WeightInDto>();
+               
         }
 
        

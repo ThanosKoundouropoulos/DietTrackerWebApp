@@ -12,13 +12,6 @@ interface Props {
 export default observer(function weightEntryItem({ weightIn }: Props) {
   const { weightStore} = useStore();
   const {deleteWeight} = weightStore;
-  
-
-
-  
-
- 
-
   const handleDelete = async () => {
     deleteWeight(weightIn.id);
   };
@@ -27,7 +20,7 @@ export default observer(function weightEntryItem({ weightIn }: Props) {
     <>
         <Segment className="meal-wrapper">
             <Header as="h1" floated="left" className="macros global-font" size="medium">
-            0001-01-01
+            {weightIn.date! instanceof Date && !isNaN(weightIn.date.getTime()) ? format(weightIn.date, 'dd MMM yyyy') : 'Invalid Date'}
             </Header>
             <Header as="h1" floated="left" className="macros  global-font" size="medium">
             {weightIn.weight}
@@ -36,10 +29,7 @@ export default observer(function weightEntryItem({ weightIn }: Props) {
             -
             </Button>
         </Segment>
-
-       
     </>
    
   );
 })
- // {format(weightIn.date!, 'dd MMM yyyy')}

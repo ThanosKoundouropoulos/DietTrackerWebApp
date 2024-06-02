@@ -9,18 +9,22 @@ import { useStore } from './stores/store';
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Container } from 'semantic-ui-react';
+import LoadingComponent from './LoadingComponent';
 
 function App() {
   const location = useLocation();
   const {commonStore, userStore} = useStore();
+  
   useEffect(() => {
-    console.log('* 1App UseEffect loading ');
+    console.log('* 2App UseEffect loading in useEffect');
     if (commonStore.token) {
       userStore.getUser().finally(() => commonStore.setAppLoaded())
     } else {
       commonStore.setAppLoaded()
     }
-  }, [commonStore, userStore])
+  }, [commonStore,commonStore.token, userStore])
+
+  if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
   return (
     <>
        <ModalContainer/>

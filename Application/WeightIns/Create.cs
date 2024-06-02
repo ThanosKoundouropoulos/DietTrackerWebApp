@@ -28,30 +28,33 @@ namespace Application.WeightIns
                 _context = context;
             }
 
-         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x =>
+                x.UserName == _userAccessor.GetUsername());
+            Console.WriteLine("Date in Handler1: " + request.WeightIn.DateRecorded);
+            if (user == null)
+                return Result<Unit>.Failure("User not found");
+
+            var weightIn = new WeightIn
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x =>
-                    x.UserName == _userAccessor.GetUsername());
+                AppUser = user,
+                Weight = request.WeightIn.Weight,
+                DateRecorded = request.WeightIn.DateRecorded // Assign string date directly
+            };
 
-                if (user == null) return Result<Unit>.Failure("User not found");
-                 var weightin = new WeightIn
-                {
-                    AppUser = user,
-                    Weight = request.WeightIn.Weight,
-                    DateRecorded = request.WeightIn.DateRecorded,
-                };
-                request.WeightIn.AppUser = user;
-                Console.WriteLine("Date in Handler: " + request.WeightIn.DateRecorded);
-                _context.WeightIn.Add(request.WeightIn);
-                user.WeightIns.Add(request.WeightIn);
+            Console.WriteLine("Date in Handler2: " + weightIn.DateRecorded);
 
-                var result = await _context.SaveChangesAsync() > 0;
+            _context.WeightIn.Add(weightIn);
+            user.WeightIns.Add(weightIn);
 
-                if (!result) return Result<Unit>.Failure("Failed to add weight in");
+            var result = await _context.SaveChangesAsync() > 0;
 
-                return Result<Unit>.Success(Unit.Value);
-              
-            }
+            if (!result)
+                return Result<Unit>.Failure("Failed to add weight in");
+
+            return Result<Unit>.Success(Unit.Value);
+        }
         }
     }
 }

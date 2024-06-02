@@ -19,17 +19,18 @@ export default class WeightStore{
 
     createWeightIn = async (weight: WeightFormValues) => {
       console.error('Weight info ', weight.date, weight.weight);
-      
       try {
-        this.setCreating(true);
+          this.setCreating(true);
           await agent.WeightIns.create(weight);
-          // await this.loadWeights();
+          const newWeightIn = new Weight(weight);
+          console.error('new Weight info ', newWeightIn.date);
+          runInAction(() => this.weightIns.push(newWeightIn));  
       } catch (error) {
-        console.error('Error creating weight entry:', error);
+          console.error('Error creating weight entry:', error);
       } finally {
-        this.setCreating(false);
+          this.setCreating(false);
       }
-    };
+  };
   
   
 
@@ -46,22 +47,18 @@ export default class WeightStore{
     loadWeights = async () => {
         try {
             this.loading = true;
+           
             const weights = await agent.WeightIns.list();
-            weights.forEach(weight =>{
-              console.error('Weight info list 1 iso', weight.date?.toISOString() , weight.weight);
-              weight.date = new Date(weight.date!);
-              console.error('Weight info list 2', weight.date , weight.weight);
-            })
-            runInAction(() => {
-             // this.weightIns = this.sortWeightsByDate(weights);
-              this.weightIns = weights.map((win) => ({
-                ...win,
-                weight: win.weight,
-                date: win.date
-            
-              }))
-            });
-         
+            if (weights.length >0) {
+              weights.forEach(weight =>{
+                console.error('Weight info ', weight.date);
+                weight.date = new Date(weight.date!);
+                runInAction(() => {
+                  // this.weightIns = this.sortWeightsByDate(weights);
+                   this.weightIns.push(weight);
+                 });
+              })
+            }   
           } catch (error) {
             console.error('Error loading weights:', error);
           } finally {
@@ -71,7 +68,7 @@ export default class WeightStore{
 
  
     sortWeightsByDate = (weights: Weight[]) => {
-        return weights.slice().sort((a, b) => b.date!.getTime() - a.date!.getTime());
+      //  return weights.slice().sort((a, b) => b.date!.getTime() - a.date!.getTime());
     };
   
 

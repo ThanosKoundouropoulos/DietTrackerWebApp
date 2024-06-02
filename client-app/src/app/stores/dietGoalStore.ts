@@ -96,6 +96,7 @@ export default class DietGoalStore{
             await agent.DietGoals.create(newGoal);   
             runInAction(() => {
                 this.selectedDietGoal = newGoal; 
+                user!.dietGoal = newGoal;
             })
         } catch (error) {
             console.log(error);
@@ -304,7 +305,9 @@ export default class DietGoalStore{
     }
 
     loadRemainingDietGoal = async (dietGoal: DietGoal) => {
+        
         this.remainingDietGoal = dietGoal;  
+        console.log("Remaining: " ,this.remainingDietGoal.calories);
     }
 
     

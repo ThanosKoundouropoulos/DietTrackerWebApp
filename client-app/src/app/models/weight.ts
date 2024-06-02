@@ -16,7 +16,7 @@ export interface Weight {
   export class WeightFormValues {
     id?: string = undefined;
     weight: number = 0;
-    date: Date | null=null;
+    date: string | null=null;
   
     constructor(meal?: WeightFormValues) {
       if (meal) {

@@ -36,7 +36,7 @@ namespace Application.WeightIns
                     {
                         Id = win.Id,
                         Weight = win.Weight,
-                        DateRecorded = win.DateRecorded
+                       // DateRecorded = win.DateRecorded
                     })
                     .ToListAsync(cancellationToken);
 

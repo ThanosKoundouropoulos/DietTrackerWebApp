@@ -77,7 +77,7 @@ export default observer(function TrackerView() {
                 <>
                   <Header className="global-font"  as={"h1"} color="teal">Add food or meals! </Header>
                   <div style={{position:'absolute',top:150,right:5}}> 
-                    <Image src="/assets/stats.png" size="medium"  />
+                    <Image src="/assets/pie-graph.png" size="medium"  />
                   </div>
                   <div style={{position:'absolute',bottom:50,left:20}}> 
                     <Header className="global-font" as={"h1"} color="teal">To display statistics !</Header>
@@ -136,12 +136,16 @@ export default observer(function TrackerView() {
         <Segment textAlign="center"  className="mealsContainer">
           <Header as='h1' color="teal" className="macros global-font">My Meals</Header>
           {meals.length === 0 ? (
-            <Header  as='h2' inverted className="macros global-font">No meals available, create your custom meals to use anytime you want !</Header>
+            <Header  as='h2' inverted className="macros global-font">Create your custom meals to use anytime you want !</Header>
           ) : (
             <MealsList/>
           )}
-          
-          <Button onClick={() => {setCreating(true);}}  positive content='Create Meal' className="mealBtn global-font"></Button>
+             <div style={{position:'absolute',top:190,right:55}}> 
+                    <Image src="/assets/recipe.png" size="small"  />
+                  </div>
+          <div style={{position:'relative',  top: 178}}>  
+            <Button onClick={() => {setCreating(true);}}  positive content='Create Meal' className="mealBtn global-font"></Button>
+          </div> 
         </Segment> 
       ): <CreateForm/>}
       

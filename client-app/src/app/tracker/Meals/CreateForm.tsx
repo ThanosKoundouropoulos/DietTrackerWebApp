@@ -64,22 +64,22 @@ export default observer(function CreateForm() {
                        <Form className='ui form global-font' onSubmit={handleSubmit} autoComplete='off' >
                            <MyTextInput  placeholder="Food name" name="name"/>
                             <MyTextArea placeholder="Description" name="description" style={{backgroundColor: "#455d7a" ,width: '250px',height:'100px',resize:'none'}}/>
-                            <GiFlame className="icons-flame" size="30px" />
-                            <Container className="macrosInput-cals">
-                                <MyMacrosInput  placeholder="Calories" name="calories" />
-                            </Container>
-                            <GiChickenLeg style={{ position: 'relative' , top: '-12px', left: '30px'  }}  className="icons chicken" size="30px" />
-                            <Container className="macrosInput-pro">
+                            <GiFlame className="icons-flame" size="30px" /> \
+                            <div style={{position:'relative',  top: 40,left: -70}}>               
+                                <MyMacrosInput  placeholder="Calories" name="calories" />   
+                            </div>                        
+                            <GiChickenLeg style={{ position: 'relative' , top: '4px', left: '20px'  }}  className="icons chicken" size="30px" />
+                            <div style={{position:'relative',  top: -41,left: 80}}>  
                                 <MyMacrosInput placeholder="Proteins" name="proteins"/>
-                            </Container>
-                            <FaBreadSlice style={{ position: 'relative' , top: '-12px', left: '-118px'  }}  className="icons bread" size="30px"/>
-                            <Container className="macrosInput-carbs">
+                            </div> 
+                            <FaBreadSlice style={{ position: 'relative' , top: '7px', left: '-130px'  }}  className="icons bread" size="30px"/>
+                            <div style={{position:'relative',  top: 1-40,left: -70}}>  
                                 <MyMacrosInput placeholder="Carbs" name="carbs"/>
-                            </Container>
-                            <GiAvocado style={{ position: 'relative' , top: '-82px', left: '30px'  }} className="icons avocado" size="30px"/>
-                            <Container className="macrosInput-fats">
+                                </div> 
+                            <GiAvocado style={{ position: 'relative' , top: '-75px', left: '20px'  }} className="icons avocado" size="30px"/>
+                            <div style={{position:'relative',  top: -118,left: 82}}>  
                                 <MyMacrosInput placeholder="Fats" name="fats"/>
-                            </Container>
+                            </div> 
                             <div style={{position:'absolute',bottom:50,right:5}}> 
                             <Button 
                                 className="global-font"
