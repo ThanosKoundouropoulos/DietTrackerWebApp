@@ -222,6 +222,29 @@ namespace Persistence.Migrations
                     b.ToTable("Meals");
                 });
 
+            modelBuilder.Entity("Domain.WeightIn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateRecorded")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Weight")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("WeightIns");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -350,29 +373,6 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WeightIn", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DateRecorded")
-                        .HasColumnType("TEXT");
-
-                    b.Property<float>("Weight")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("WeightIn");
-                });
-
             modelBuilder.Entity("Domain.DietGoal", b =>
                 {
                     b.HasOne("Domain.AppUser", "AppUser")
@@ -418,6 +418,17 @@ namespace Persistence.Migrations
                     b.Navigation("DietGoal");
 
                     b.Navigation("Meal");
+                });
+
+            modelBuilder.Entity("Domain.WeightIn", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("WeightIns")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -469,17 +480,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WeightIn", b =>
-                {
-                    b.HasOne("Domain.AppUser", "AppUser")
-                        .WithMany("WeightIns")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Domain.AppUser", b =>

@@ -1,22 +1,19 @@
 import { observer } from "mobx-react-lite";
-import { Button, Container, Grid, Header, Segment, Image } from "semantic-ui-react";
+import { Button, Container, Grid, Header, Segment, Image, Label } from "semantic-ui-react";
 import { useStore } from "../stores/store";
-import { NavLink, useParams } from "react-router-dom";
-
-
 import { useEffect, useState } from "react";
 import LoadingComponent from "../LoadingComponent";
 import MacrosHeader from "./FoodsAndMacros/MacrosHeader";
 import FoodList from "./FoodsAndMacros/FoodList";
 import { SearchBar } from "./Searching/SearchBar";
 import { Food } from "../models/Food";
-import { SearchResultsList } from "./Searching/SearchResultList";
 import RemainingMacros from "./FoodsAndMacros/RemainingMacros";
 import StatisticsChart from "./Statistics/PieChart";
 import DonutChart from "./Statistics/DonutChart";
 import MealsList from "./Meals/MealsList";
-import modalStore from "../stores/modalStore";
 import CreateForm from "./Meals/CreateForm";
+import Tooltip from "../common/Tooltip";
+import RibbonLabel from "../common/RibbonLabel";
 
 
 
@@ -30,7 +27,7 @@ export default observer(function TrackerView() {
   const {loadFoods,foods} = foodStore;
   const {isCreating,setCreating,meals,loadMeals,mealEntries,loadMealEntries} = mealStore;
   const {addFoodToDiet,remainingDietGoal} = dietGoalStore;
-  const {userStore : {user,dietGoal,getUser}} = useStore();
+  const {userStore : {user,dietGoal,hasDietPlan}} = useStore();
   const [results, setResults] = useState<Food[]>([]);
 
 
@@ -70,17 +67,23 @@ export default observer(function TrackerView() {
       <Grid className="trackerGrid">
        
           <>
+          <div style={{position:'absolute',top:50,right:300,zIndex:1,fontSize: '45px',color:"#233142"}}> 
+          <Tooltip content={<span style={{ fontSize:'15px' }}  >This is your diet goal. Aim to consume the exact amount of calories you need. 
+            If you want to update your diet goal you can do it in the <span style={{ color: 'teal' }}>Calculator</span> tab.</span>}  />
+          </div>
           <Grid.Column width='3'>
-            
+
+         
             <Segment textAlign="center" className="statsContainer">
+          
               {foods.length ===0 && mealEntries.length ===0 ? (
                 <>
-                  <Header className="global-font"  as={"h1"} color="teal">Add food or meals! </Header>
-                  <div style={{position:'absolute',top:150,right:5}}> 
+                  <Label size="huge" color="teal" attached='top'><Header as='h1' color="black" className="macros global-font">Statistics</Header></Label>
+                  <div style={{position:'absolute',top:120,right:12}}> 
                     <Image src="/assets/pie-graph.png" size="medium"  />
                   </div>
                   <div style={{position:'absolute',bottom:50,left:20}}> 
-                    <Header className="global-font" as={"h1"} color="teal">To display statistics !</Header>
+                    <Header inverted className="global-font" as={"h1"} color="teal">Add foods or meals to display statistics !</Header>
                   </div>
                 </>
               ):(
@@ -101,7 +104,7 @@ export default observer(function TrackerView() {
                 { dietGoal ? (
                   <>
                      
-                      <MacrosHeader />
+                      <MacrosHeader  />
                       <RemainingMacros/>
                       
                     <Container  className="entriesContainer">
@@ -134,16 +137,22 @@ export default observer(function TrackerView() {
       <Grid.Column width='3'>
       {!isCreating ? (
         <Segment textAlign="center"  className="mealsContainer">
-          <Header as='h1' color="teal" className="macros global-font">My Meals</Header>
+          <Label size="huge" color="teal" attached='top'><Header as='h1' color="black" className="macros global-font">My Meals</Header></Label>
+          
           {meals.length === 0 ? (
-            <Header  as='h2' inverted className="macros global-font">Create your custom meals to use anytime you want !</Header>
+            <>
+             <div style={{position:'absolute',top:90,right:5}}>
+             <Header  as='h3' color="teal" inverted className="macros global-font">Create your custom <br/> meals to use anytime you want!</Header>
+             </div>
+              <div style={{position:'absolute',top:250,right:55}}> 
+                <Image src="/assets/recipe.png" size="small"  />
+              </div>
+            </>    
           ) : (
             <MealsList/>
           )}
-             <div style={{position:'absolute',top:190,right:55}}> 
-                    <Image src="/assets/recipe.png" size="small"  />
-                  </div>
-          <div style={{position:'relative',  top: 178}}>  
+            
+          <div style={{position:'relative',  top: 420}}>  
             <Button onClick={() => {setCreating(true);}}  positive content='Create Meal' className="mealBtn global-font"></Button>
           </div> 
         </Segment> 

@@ -10,6 +10,7 @@ import { Formik } from "formik";
 import * as Yup from 'yup';
 import MyDateInput from "../common/forms/MyDateInput";
 import MyMacrosInput from "../common/forms/MyMacrosInput";
+import LoadingPlaceholder from "../common/LoadingPlaceholder";
 
 
 
@@ -20,7 +21,7 @@ import MyMacrosInput from "../common/forms/MyMacrosInput";
 
 export default observer(function WeightHistory() {
   const { weightStore } = useStore();
-  const { weightIns, createWeightIn } = weightStore;
+  const { weightIns, createWeightIn,loading } = weightStore;
   const [openForm, setOpenForm] = useState(false);
   const [weightIn,setWeightIn] = useState<WeightFormValues>(new WeightFormValues)
 
@@ -28,16 +29,14 @@ export default observer(function WeightHistory() {
 
   const validationSchema = Yup.object({
     weight: Yup.number().required(),
-    date: Yup.string().required().nullable()
+    dateRecorded: Yup.date().required().nullable()
   
 })
 
   const handleSubmit = (values: WeightFormValues) => {
-    console.log('WeightForm Values:', values);
-    const newWeightIn = new WeightFormValues(values);
-    newWeightIn.id = uuid();
-    console.log('newWeightIn Values:', newWeightIn);
-    createWeightIn(newWeightIn);
+    values.id = uuid();
+    console.log('Values:', values);
+    createWeightIn(values);
     setOpenForm(false);
   };
 
@@ -58,8 +57,15 @@ export default observer(function WeightHistory() {
             </div>
           </>
         ) : (
-          <WeightEntryList />
+          <>     
+            { loading ? (
+              <LoadingPlaceholder/>
+            ) : (
+              <WeightEntryList />
+            )}          
+          </>   
         )}
+
         <Button onClick={() => setOpenForm(true)} positive content="Add Entry" className="weightBtn global-font" />
         {openForm && (
            <Formik 
@@ -78,7 +84,7 @@ export default observer(function WeightHistory() {
                               <div  style={{position:"absolute" ,top:170,right:35 , boxShadow: '10px 0px 10px rgba(0, 0, 0, 0.2)',backgroundColor:"#233142" ,color:"#233142"}}>
                                 <MyDateInput   
                                     placeholder='Date'
-                                    name='date'                              
+                                    name='dateRecorded'                              
                                 />
                                </div>
                               <div style={{position:"absolute" ,top:250,right:30}}>

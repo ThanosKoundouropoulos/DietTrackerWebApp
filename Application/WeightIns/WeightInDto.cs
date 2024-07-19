@@ -6,7 +6,7 @@ namespace Application.WeightIns
     {   
         public Guid Id { get; set; }
         public float Weight { get; set; }
-        public string DateRecorded { get; set; }
+        public DateTime DateRecorded { get; set; }
      
     }
 }

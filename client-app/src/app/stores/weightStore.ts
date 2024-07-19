@@ -18,24 +18,26 @@ export default class WeightStore{
     }
 
     createWeightIn = async (weight: WeightFormValues) => {
-      console.error('Weight info ', weight.date, weight.weight);
+      console.error('Weight info ', weight.dateRecorded, weight.weight);
       try {
           this.setCreating(true);
-          await agent.WeightIns.create(weight);
+
           const newWeightIn = new Weight(weight);
-          console.error('new Weight info ', newWeightIn.date);
-          runInAction(() => this.weightIns.push(newWeightIn));  
+          console.log('Payload to be sent:', newWeightIn); // Log the payload
+          await agent.WeightIns.create(weight);
+          runInAction(() => this.weightIns.push(newWeightIn));
       } catch (error) {
           console.error('Error creating weight entry:', error);
       } finally {
           this.setCreating(false);
       }
-  };
+  };;
   
   
 
     deleteWeight = async ( weightId: string ) => {
         try {
+            console.log('Id to be sent:', weightId);
             await agent.WeightIns.delete(weightId);
             runInAction(() => this.removeWeight(weightId));   
           } catch (error) {
@@ -51,8 +53,7 @@ export default class WeightStore{
             const weights = await agent.WeightIns.list();
             if (weights.length >0) {
               weights.forEach(weight =>{
-                console.error('Weight info ', weight.date);
-                weight.date = new Date(weight.date!);
+                console.error('Weight info ', weight.dateRecorded, weight.weight);
                 runInAction(() => {
                   // this.weightIns = this.sortWeightsByDate(weights);
                    this.weightIns.push(weight);

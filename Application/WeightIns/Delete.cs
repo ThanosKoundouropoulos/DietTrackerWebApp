@@ -29,10 +29,11 @@ namespace Application.WeightIns
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var weightIn = await _context.WeightIn.FindAsync(request.Id);
+               Console.WriteLine("Id in Handler1: " + request.Id);
+            var weightIn = await _context.WeightIns.FindAsync(request.Id);
 
             if (weightIn == null)
-                return Result<Unit>.Failure("WeightIn not found");
+                return Result<Unit>.Failure("WeightIn not found 1");
 
             _context.Remove(weightIn);
 

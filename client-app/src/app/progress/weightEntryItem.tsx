@@ -13,14 +13,15 @@ export default observer(function weightEntryItem({ weightIn }: Props) {
   const { weightStore} = useStore();
   const {deleteWeight} = weightStore;
   const handleDelete = async () => {
+    console.log('Delete Id :', weightIn.id);
     deleteWeight(weightIn.id);
   };
-    //{format(activity.date!, 'dd MMM yyyy')}
+    
   return (
     <>
         <Segment className="meal-wrapper">
             <Header as="h1" floated="left" className="macros global-font" size="medium">
-            {weightIn.date! instanceof Date && !isNaN(weightIn.date.getTime()) ? format(weightIn.date, 'dd MMM yyyy') : 'Invalid Date'}
+            {format(weightIn.dateRecorded!, 'dd MMM yyyy')}
             </Header>
             <Header as="h1" floated="left" className="macros  global-font" size="medium">
             {weightIn.weight}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { parseISO, compareAsc } from 'date-fns';
+import { parseISO, compareAsc, getTime, format } from 'date-fns';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,51 +28,59 @@ ChartJS.register(
 
 
 export default observer(function WeightChart(){
-      const { weightStore } = useStore();
-      const { weightIns} = weightStore;
-// Sort weightIns by date in ascending order
-const sortedWeights = weightIns
-  .slice()
-  //.sort((a, b) => compareAsc(parseISO(a.date.toISOString()), parseISO(b.date.toISOString())));
+  const { weightStore } = useStore();
+  const { weightIns } = weightStore;
 
-// Get the first weight entry to determine the range
-const firstWeight = sortedWeights[0];
+  // Sort weightIns by date in ascending order
+  const sortedWeights = weightIns
+    .slice()
+    .sort((a, b) => compareAsc(a.dateRecorded!, b.dateRecorded!));
 
-// Generate labels based on the first weight entry
-const labels = sortedWeights.map(weight => (weight.date ? weight.date.getTime() : 0));
+  // Generate labels based on the date of each weight entry
+  const labels = sortedWeights.map(weight => (weight.dateRecorded ? format(new Date(weight.dateRecorded), 'dd MMM yyyy') : ''));
 
-// Extract weights for each label
-const dataSets = weightIns.map(weight => weight.weight);
+  // Extract weights for each label
+  const dataSets = sortedWeights.map(weight => weight.weight);
 
-const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Weight Progress',
-      data: dataSets,
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Weight Progress',
+        data: dataSets,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Weight Progress',
+      },
     },
-  ],
-};
+    scales: {
+      x: {
+        ticks: {
+          callback: function(value: number | string, index: number, values: any[]): string {
+            return labels[index]; // Use preformatted labels
+          }
+        }
+      }
+    }
+  };
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Weight Progress',
-    },
-  },
-};
       
     return(
 
         <Container  className="lineContainer">
-          <Line data={data} options={options} />;
+          <Line data={data} options={options} />
        </Container>
     )
 })
