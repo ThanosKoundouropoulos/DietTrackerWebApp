@@ -64,7 +64,7 @@ namespace Application.Foods
 
                     // Retrieve the food
                     var food = await _context.Foods.FindAsync(request.FoodId);
-                    Console.WriteLine($"#####Food in Handler: {food.name}");
+                    Console.WriteLine($"#####Food in Handler: {food.Name}");
                     if (food == null)
                     {
                         return Result<Unit>.Failure("Food not found.");
@@ -82,7 +82,7 @@ namespace Application.Foods
                    
                     if (existingDietGoalFood != null)
                     {
-                        Console.WriteLine($"#####Food in Handler in Relation: {existingDietGoalFood.Food.name}");
+                        Console.WriteLine($"#####Food in Handler in Relation: {existingDietGoalFood.Food.Name}");
                         Console.WriteLine($"#####Food in Handler in Relation: {existingDietGoalFood.amountConsumed}");
                         // If the food already exists, update the amount consumed
                         existingDietGoalFood.amountConsumed += request.amountConsumed;

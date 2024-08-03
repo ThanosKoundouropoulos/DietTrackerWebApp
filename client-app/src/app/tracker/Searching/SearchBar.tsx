@@ -17,11 +17,10 @@ interface SearchBarProps {
 export const SearchBar: React.FC<SearchBarProps> = observer(({ setResults, onAddFood }) => {
   const [input, setInput] = useState("");
   const [inputGr, setInputGr] = useState("");
+  const [unit, setUnit] = useState('100gr');
   const [showResults, setShowResults] = useState(false);
   const { foodStore } = useStore();
   const { searchResults, searchFoods, clearSearchResults } = foodStore;
-
- 
 
   const handleSelectResult = (selectedResult: Food) => {
     setInput(selectedResult.name);
@@ -29,15 +28,20 @@ export const SearchBar: React.FC<SearchBarProps> = observer(({ setResults, onAdd
   };
 
   const handleAddFood = () => {
-    
-    const amount = parseFloat(inputGr);
+    let amount = parseFloat(inputGr);
     if (!isNaN(amount)) {
-      console.error('Food name as input :', input);
+      if (unit === '100gr') {
+        //amount *= 100;
+      }
+      else{
+        amount = amount / 100;
+      }
+      console.error('Food name as input:', input);
       const selectedFood = foodStore.selectFood(input);
-  
+
       if (selectedFood) {
-        console.error('Food name after selection  :', selectedFood.name);
-        onAddFood(selectedFood,amount);
+        console.error('Food name after selection:', selectedFood.name);
+        onAddFood(selectedFood, amount);
         setInput("");
         setInputGr("");
         setShowResults(false);
@@ -52,77 +56,62 @@ export const SearchBar: React.FC<SearchBarProps> = observer(({ setResults, onAdd
   const validationSchema = Yup.object({
     food: Yup.string().required(),
     gramms: Yup.string().required(),
-   
-})
+  });
 
-/*   useEffect(() => {
-    if (input.trim() !== "") {
-    const fetchData = async () => {
-      console.log('foodStore instance IN SEARCH BAR  :');
-      if (input.trim() !== "") {
-        try {
-          // Call the searchFoods function with the input value
-          console.log('foodStore instance IN SEARCH BAR  :');
-          await searchFoods(input);
-          setResults(searchResults);
-          setShowResults(true);
-        } catch (error) {
-          console.error('Error searching foods:', error);
-        }
-      } else {
-        // Clear results if the input is empty
-        clearSearchResults();
-        setShowResults(false);
-      }
-    };
-    // Fetch data when the input changes
-    fetchData();
-    }
-    
-  }, [input, searchFoods, searchResults, setResults, clearSearchResults]);
-*/
-
-  const handleChange = (e:any) => {
+  const handleChange = (e: any) => {
     const inputValue = e.target.value;
     setInput(inputValue);
 
-    // Perform the search only if the input is not empty
     if (inputValue.trim() !== '') {
       searchFoods(inputValue);
       setShowResults(true);
     } else {
-      // Clear results if the input is empty
       clearSearchResults();
       setShowResults(false);
     }
   };
 
-  
-    return (
-      <>
-       <Container className="search-input-wrapper">
-            <FaSearch id="search-icon" />
-                <Input className="foodInput"
-                    name="food"
-                    transparent
-                    placeholder="Add foods from the database..."
-                    value={input}
-                    onChange={handleChange}
-                />    
-        </Container>
-        {showResults && <SearchResultsList results={searchResults} onSelectResult={handleSelectResult} />}
-        <Container className="input-wrapper-grams">
-            <Input className="foodInput"
-                name="gramms"
-                transparent
-                placeholder="of 100 gr"
-                value={inputGr}
-                onChange={(e) =>  setInputGr(e.target.value)}
-            />
-        </Container>
-        <Button icon='add' floated="left" inverted color='green' className="addFoodButton" onClick={handleAddFood} />
-         
-      </>
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputGr(e.target.value);
+  };
+
+  const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUnit(e.target.value);
+    setInputGr('');
+  };
+
+  return (
+    <>
+      <Container className="search-input-wrapper ">
+        <FaSearch id="search-icon" />
+        <Input
+          className="foodInput "
+          name="food"
+          transparent
+          placeholder="Add foods from the database..."
+          value={input}
+          onChange={handleChange}
+        />
+      </Container>
+      {showResults && <SearchResultsList results={searchResults} onSelectResult={handleSelectResult} />}
+      
+      <Container className="input-wrapper-grams ">
+      
+        <Input
+          className="foodInput"
+          name="gramms"
+          transparent
+          placeholder={`  qty of`}
+          value={inputGr}
+          onChange={handleInputChange}
+        />
+      </Container>
+      <select className="input-wrapper-grams global-font" style={{position:"absolute",right:80, zIndex:1,top:26}} value={unit} onChange={handleUnitChange}>
+          <option value="100gr">100 gr</option>
+          <option value="1gr">1 gram</option>
+        </select>
+      <Button icon='add' floated="left" inverted color='green' className="addFoodButton" onClick={handleAddFood} />
+    </>
        
       );
 });

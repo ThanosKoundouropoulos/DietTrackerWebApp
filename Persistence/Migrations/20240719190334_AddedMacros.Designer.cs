@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240719190334_AddedMacros")]
+    partial class AddedMacros
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -261,69 +264,6 @@ namespace Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
-
-                    b.Property<double>("BetaCarotene")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Caffeine")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Calcium")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Cholesterol")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Fiber")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Folate")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Iron")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Magnesium")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("MonounsaturatedFattyAcids")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("PolyunsaturatedFattyAcids")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Potassium")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Retinol")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("SaturatedFattyAcids")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Sodium")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Sugars")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("VitaminA")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("VitaminB12")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("VitaminC")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("VitaminD")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("VitaminK")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Zinc")
-                        .HasColumnType("REAL");
 
                     b.Property<float>("calories")
                         .HasColumnType("REAL");

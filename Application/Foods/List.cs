@@ -48,11 +48,11 @@ namespace Application.Foods
                     .Select(df => new ConsumedFoodDto
                         {
                             Id = df.Food.Id,
-                            name = df.Food.name,
-                            calories = df.Food.calories,
-                            proteins = df.Food.proteins,
-                            carbs = df.Food.carbs,
-                            fats = df.Food.fats,
+                            name = df.Food.Name,
+                            calories = df.Food.Calories,
+                            proteins = df.Food.Proteins,
+                            carbs = df.Food.Carbs,
+                            fats = df.Food.Fats,
                             amountConsumed = df.amountConsumed 
                         })
                     .ToListAsync(cancellationToken);

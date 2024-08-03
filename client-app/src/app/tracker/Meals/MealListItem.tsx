@@ -18,9 +18,10 @@ function round(value: number, precision: number) {
 
 
 export default observer(function MealListItem({ meal }: Props) {
-  const { dietGoalStore,mealStore} = useStore();
+  const { dietGoalStore,mealStore,userStore} = useStore();
   const {addMealToDiet} = dietGoalStore;
   const {deleteMeal} = mealStore;
+  const {hasDietPlan} = userStore;
   
 
   const [openDetails, setOpenDetails] = useState(false);
@@ -44,11 +45,9 @@ export default observer(function MealListItem({ meal }: Props) {
             <Header as="h1" floated="left" className="macros global-font" size="medium">
             {meal.name}
             </Header>
-            <Button icon="add" floated="right" inverted color="green" className="addFoodButton" onClick={handleAddMeal} />
-            <Button icon="info" floated="right" inverted color="blue" className="addFoodButton" onClick={() => setOpenDetails(true)} />
-            <Button inverted color="red" className="macros" onClick={handleDelete}>
-            Delete
-            </Button>
+            <Button disabled={!hasDietPlan}  icon="add" floated="right" inverted color="green"  onClick={handleAddMeal} />
+            <Button  icon="info" floated="right" inverted color="blue" onClick={() => setOpenDetails(true)} />
+            <Button inverted floated="right"  color="red"  onClick={handleDelete}>-</Button>
         </Segment>
 
         {openDetails && (

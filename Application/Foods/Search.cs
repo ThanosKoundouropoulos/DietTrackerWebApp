@@ -38,7 +38,8 @@ namespace Application.Foods
                     Console.WriteLine($"Search Term in API: {searchTerm}");
 
                     var foods = await _context.Foods
-                        .Where(f => f.name.ToLower().Contains(searchTerm))
+                        .Where(f => f.Name.ToLower().Contains(searchTerm))
+                        .Take(5)
                         .ProjectTo<FoodDto>(_mapper.ConfigurationProvider)
                         .ToListAsync(cancellationToken);
 

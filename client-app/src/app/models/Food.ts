@@ -8,6 +8,28 @@ export interface Food {
     carbs: number;
     fats: number;
     amountConsumed?: number;
+    // New macronutrient fields
+    caffeine: number;
+    sugars: number;
+    fiber: number;
+    calcium: number;
+    iron: number;
+    magnesium: number;
+    potassium: number;
+    sodium: number;
+    zinc: number;
+    retinol: number;
+    vitaminA: number;
+    betaCarotene: number;
+    vitaminD: number;
+    vitaminC: number;
+    folate: number;
+    vitaminB12: number;
+    vitaminK: number;
+    cholesterol: number;
+    saturatedFattyAcids: number;
+    monounsaturatedFattyAcids: number;
+    polyunsaturatedFattyAcids: number;
 
   }
 

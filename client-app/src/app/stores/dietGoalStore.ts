@@ -81,12 +81,12 @@ export default class DietGoalStore{
 
 
     createGoal = async (dietGoal: DietGoalFormValues) => {
-        const user = store.userStore.user;
+        const uStore = store.userStore;
         const dailyCalories = this.calculateCalorieIntake(Number(dietGoal.age), dietGoal.gender, Number(dietGoal.weight), Number(dietGoal.height), Number(dietGoal.activityLevel),dietGoal.plan);
         const macros = this.splitCaloriesToMacros(await dailyCalories);
        
         try {
-            user!.hasDietPlan =true;
+          uStore.user!.hasDietPlan =true;
             const newGoal = new DietGoal(dietGoal)
             newGoal.calories =dailyCalories;
             newGoal.proteins =macros.protein;
@@ -96,7 +96,9 @@ export default class DietGoalStore{
             await agent.DietGoals.create(newGoal);   
             runInAction(() => {
                 this.selectedDietGoal = newGoal; 
-                user!.dietGoal = newGoal;
+                this.remainingDietGoal = newGoal;
+                uStore.user!.dietGoal = newGoal;
+                uStore.dietGoal = newGoal;
             })
         } catch (error) {
             console.log(error);
@@ -104,6 +106,8 @@ export default class DietGoalStore{
     }
 
     editDietGoal = async (dietGoal: DietGoalFormValues) => {
+        const foodStore = store.foodStore;
+        const mealStore = store.mealStore;
         const uStore = store.userStore;
         const dailyCalories = this.calculateCalorieIntake(Number(dietGoal.age), dietGoal.gender, Number(dietGoal.weight), Number(dietGoal.height), Number(dietGoal.activityLevel),dietGoal.plan);
         const macros = this.splitCaloriesToMacros(await dailyCalories);
@@ -115,12 +119,31 @@ export default class DietGoalStore{
             newGoal.carbs =macros.carbs;
             newGoal.fats =macros.fat;
             console.log("NEW GOAL :" ,newGoal);
-            
-            await agent.DietGoals.update(newGoal);   
+           
             runInAction(() => {
+              foodStore.foods = [];
+              mealStore.mealEntries = [];
               uStore.updateGoal(newGoal);
               this.remainingDietGoal = newGoal; 
             })
+             
+            await agent.DietGoals.update(newGoal);   
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    deleteDietGoal = async (goalId: string) => {
+        const uStore = store.userStore;
+        const foodStore = store.foodStore;
+        const mealStore = store.mealStore;
+        try {
+            runInAction(() => {
+              foodStore.foods = [];
+              mealStore.mealEntries = [];
+              this.remainingDietGoal = undefined; 
+              uStore.dietGoal = null;
+            })
+            await agent.DietGoals.delete(goalId);  
         } catch (error) {
             console.log(error);
         }

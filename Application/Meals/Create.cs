@@ -57,7 +57,28 @@ namespace Application.Meals
                         calories = request.Meal.calories,
                         proteins = request.Meal.proteins,
                         carbs = request.Meal.carbs,
-                        fats = request.Meal.fats
+                        fats = request.Meal.fats,
+                        Caffeine = request.Meal.Caffeine,
+                        Sugars = request.Meal.Sugars,
+                        Fiber = request.Meal.Fiber,
+                        Calcium = request.Meal.Calcium,
+                        Iron = request.Meal.Iron,
+                        Magnesium = request.Meal.Magnesium,
+                        Potassium = request.Meal.Potassium,
+                        Sodium = request.Meal.Sodium,
+                        Zinc = request.Meal.Zinc,
+                        Retinol = request.Meal.Retinol,
+                        VitaminA = request.Meal.VitaminA,
+                        BetaCarotene = request.Meal.BetaCarotene,
+                        VitaminD = request.Meal.VitaminD,
+                        VitaminC = request.Meal.VitaminC,
+                        Folate = request.Meal.Folate,
+                        VitaminB12 = request.Meal.VitaminB12,
+                        VitaminK = request.Meal.VitaminK,
+                        Cholesterol = request.Meal.Cholesterol,
+                        SaturatedFattyAcids = request.Meal.SaturatedFattyAcids,
+                        MonounsaturatedFattyAcids = request.Meal.MonounsaturatedFattyAcids,
+                        PolyunsaturatedFattyAcids = request.Meal.PolyunsaturatedFattyAcids
                         
                     };
                     _context.Meals.Add(newMeal);

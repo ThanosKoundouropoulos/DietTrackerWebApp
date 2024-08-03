@@ -31,20 +31,24 @@ export default observer(function NavBar() {
     <>
      <Menu inverted fixed="top">
             <Container className='navContainer'>
-                <AiFillHome className="icons navIcon " size="35px" />
+                
+                <Menu.Item as={NavLink} to='/' header position='left' className='navItem global-font' >
+                  <AiFillHome  className="icons navIcon " size="35px" />
+                </Menu.Item>
                 <Menu.Item as={NavLink} to='/tracker' header position='left' className='navItem global-font' >
                     Diet Tracker
                 </Menu.Item>
                 <GiProgression className="icons navIcon" size="35px" />
                 <Menu.Item className='global-font' as={NavLink} to='/progress' name="Progress" position='left'></Menu.Item>
+                <GiMuscularTorso className="icons navIcon" size="35px"  />
                 <Menu.Item onClick={handleCalculatorClick} position='left'>
-                    <GiMuscularTorso className="icons navIcon" size="35px"  />
+                    
                     <span className='global-font' >Calculator</span>
                 </Menu.Item>
                
                 <Menu.Item >
                     
-                    <Dropdown className='global-font' pointing = 'top left' text={user?.displayName} icon='user' >
+                    <Dropdown className='global-font' pointing = 'top left' text={ user?.displayName} icon='user' >
                         <Dropdown.Menu>
                             <Dropdown.Item onClick={logout} text='Logout' icon='power'/>
                         </Dropdown.Menu>

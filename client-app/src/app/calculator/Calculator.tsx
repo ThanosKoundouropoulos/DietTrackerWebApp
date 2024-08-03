@@ -23,12 +23,12 @@ interface Props {
 
 export default observer(function Calculator({ onClose }: Props) {
     const {dietGoalStore,userStore} = useStore();
-    const {createGoal,editDietGoal } = dietGoalStore;
-    const {hasDietPlan } = userStore;
+    const {createGoal,editDietGoal,deleteDietGoal } = dietGoalStore;
+    const {hasDietPlan,dietGoal,user } = userStore;
 
    
   
-    const [dietGoal,setDietGoal] = useState<DietGoalFormValues>(new DietGoalFormValues)
+    const [dietGoalForm,setDietGoal] = useState<DietGoalFormValues>(new DietGoalFormValues)
 
     const validationSchema = Yup.object({
         age: Yup.string().required(),
@@ -49,6 +49,11 @@ export default observer(function Calculator({ onClose }: Props) {
         }
         onClose();
     }
+    function handleDeleteGoal() {
+        deleteDietGoal(dietGoal?.id!);
+        user!.hasDietPlan = false;
+        onClose();
+    }
 
 
     return (
@@ -56,7 +61,7 @@ export default observer(function Calculator({ onClose }: Props) {
             <Formik 
                 validationSchema={validationSchema}
                 enableReinitialize 
-                initialValues={dietGoal} 
+                initialValues={dietGoalForm} 
                 onSubmit={values => handleFormSubmit(values)}>
                     {({handleSubmit,isValid,isSubmitting,dirty}) =>(
                        <Form className='ui form ' onSubmit={handleSubmit} autoComplete='off' >
@@ -90,6 +95,22 @@ export default observer(function Calculator({ onClose }: Props) {
                                     content={hasDietPlan ? 'Update' : 'Create'}
                                 />
                                 </div> 
+                                <div style={{ position: 'absolute', top: 305, right: 30 }}>
+                                <Button
+                                        className="global-font"
+                                        as={Link}
+                                        to='/tracker'
+                                        floated='left'
+                                        type='button'
+                                        content='Delete'
+                                        onClick={handleDeleteGoal}
+                                        style={{
+                                            backgroundColor: 'rgb(89, 20, 33)',
+                                            color: 'white',
+                                            padding: '15px 30px',         
+                                        }}
+                                    />
+                                </div>
                                 <div style={{position:'absolute', top:305, right:200}}> 
                                      <Button  className="global-font" as={Link}  to='/tracker' floated='left' inverted type='button' color="red" content='Cancel' onClick={onClose}/>
                                 </div>                         
