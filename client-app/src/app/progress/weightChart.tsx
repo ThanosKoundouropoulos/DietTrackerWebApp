@@ -1,5 +1,4 @@
-import React from 'react';
-import { parseISO, compareAsc, getTime, format } from 'date-fns';
+import { compareAsc, format } from 'date-fns';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +10,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
 import { Container } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/store';
@@ -36,10 +34,7 @@ export default observer(function WeightChart(){
     .slice()
     .sort((a, b) => compareAsc(a.dateRecorded!, b.dateRecorded!));
 
-  // Generate labels based on the date of each weight entry
   const labels = sortedWeights.map(weight => (weight.dateRecorded ? format(new Date(weight.dateRecorded), 'dd MMM yyyy') : ''));
-
-  // Extract weights for each label
   const dataSets = sortedWeights.map(weight => weight.weight);
 
   const data = {

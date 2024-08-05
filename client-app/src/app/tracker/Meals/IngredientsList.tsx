@@ -1,16 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { Fragment } from "react";
 import { useStore } from "../../stores/store";
-import { Container, Header, Segment } from "semantic-ui-react";
-import MealListItem from "./MealListItem";
+import { Container } from "semantic-ui-react";
 import Ingredient from "./Ingredient";
-
-
-
-
-
-
-
 
 export default observer(function IngredientList(){
     const {mealStore} = useStore();

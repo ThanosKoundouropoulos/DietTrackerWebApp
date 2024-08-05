@@ -1,13 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-
 import agent from "../api/agent";
-
-
-
-
 import { store } from "./store";
-import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
-import { Macronutrients } from "../models/macros";
 import { Food } from "../models/Food";
 
 

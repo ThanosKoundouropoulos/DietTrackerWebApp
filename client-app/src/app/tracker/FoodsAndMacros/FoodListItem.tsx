@@ -1,7 +1,6 @@
-import React from 'react';
 import { GiChickenLeg,GiAvocado ,GiFlame} from 'react-icons/gi';
 import { FaBreadSlice } from 'react-icons/fa';
-import { Item, Button, Label, Segment, Grid, Header } from 'semantic-ui-react';
+import { Button, Segment, Header } from 'semantic-ui-react';
 import { Food } from '../../models/Food';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../stores/store';

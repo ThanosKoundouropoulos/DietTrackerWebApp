@@ -1,11 +1,10 @@
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Button, Container, Input, List } from "semantic-ui-react";
+import { Button, Container, Input } from "semantic-ui-react";
 import { useStore } from "../../stores/store";
-import { Food, FoodFormValues } from "../../models/Food";
+import { Food } from "../../models/Food";
 import * as Yup from 'yup';
-import userStore from "../../stores/userStore";
 import { SearchResultsList } from "./SearchResultList";
 
 
@@ -36,11 +35,9 @@ export const SearchBar: React.FC<SearchBarProps> = observer(({ setResults, onAdd
       else{
         amount = amount / 100;
       }
-      console.error('Food name as input:', input);
       const selectedFood = foodStore.selectFood(input);
 
       if (selectedFood) {
-        console.error('Food name after selection:', selectedFood.name);
         onAddFood(selectedFood, amount);
         setInput("");
         setInputGr("");

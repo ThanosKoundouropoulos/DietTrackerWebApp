@@ -1,19 +1,12 @@
 
-
 import { observer } from 'mobx-react-lite';
 import { useStore } from './stores/store';
-import { Button, Container, Dropdown, Icon, Menu, MenuItem } from 'semantic-ui-react';
-import { Link, NavLink } from 'react-router-dom';
+import { Container, Dropdown, Menu } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
 import { GiProgression,GiMuscularTorso} from 'react-icons/gi';
 import { AiFillHome} from 'react-icons/ai';
 import { useState } from 'react';
 import CalculatorModal from './calculator/CalculatorModal';
-
-
-
-
-
-
 
 
 export default observer(function NavBar() {
@@ -62,6 +55,3 @@ export default observer(function NavBar() {
     </>
   );
 })
-
-//<GiMuscularTorso className="icons navIcon" size="35px" />
-//<Menu.Item as={NavLink} to='/calculator' name="Calculator"  position='left'/>

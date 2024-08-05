@@ -33,7 +33,6 @@ namespace Application.Meals
             try
             {   
                 var userName = _userAccessor.GetUsername();
-                Console.WriteLine($"Username in Handler 1: {userName}");
 
                 if (string.IsNullOrEmpty(userName))
                 {
@@ -52,10 +51,8 @@ namespace Application.Meals
                     return Result<Unit>.Failure($"User with username '{userName}' does not have a diet goal.");
                 }
             
-                Console.WriteLine($"#####Username in Handler 2: {user.UserName}");
-            
                 var meal = await _context.Meals.FindAsync(request.MealId);
-                Console.WriteLine($"#####meal in Handler 3: {meal.name}");
+     
                 if (meal == null)
                 {
                     return Result<Unit>.Failure("meal not found.");
@@ -66,13 +63,11 @@ namespace Application.Meals
                     return Result<Unit>.Failure("Request is null");
                 }
 
-                // Check if there's an existing relationship with the same MealId in the user's diet goal
                 var existingDietGoalMeal = _context.DietGoalMeals.FirstOrDefault(df => df.MealId == request.MealId);
                
                 if (existingDietGoalMeal != null)
                 {
-                    // Update relevant properties like quantity or any other property
-                    existingDietGoalMeal.Quantity += 1; // Example: Increment the quantity by 1
+                    existingDietGoalMeal.Quantity += 1; 
                 }
                 else
                 {
@@ -80,7 +75,7 @@ namespace Application.Meals
                     { 
                         DietGoal = user.DietGoal, 
                         Meal = meal,
-                        Quantity = 1 // Example: Set the initial quantity to 1
+                        Quantity = 1 
                     };
                     user.DietGoal.Meals.Add(newDietGoalMeal);
                 }

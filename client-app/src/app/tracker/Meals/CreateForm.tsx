@@ -24,7 +24,6 @@ import { MealFormValues } from "../../models/meal";
 
 export default observer(function CreateForm() {
     const {mealStore : {setCreating,createMeal}} = useStore();
-    const navigate = useNavigate();
 
     const [meal,setMeal] = useState<MealFormValues>(new MealFormValues)
 
@@ -40,11 +39,8 @@ export default observer(function CreateForm() {
  
     
     function handleFormSubmit(values: MealFormValues) {
-        console.log('Form Values:', values);
-
         const newMeal = new MealFormValues(values);
         newMeal.id = uuid();
-        console.log('New Meal:', newMeal);
         createMeal(newMeal);
         setCreating(false);
       }

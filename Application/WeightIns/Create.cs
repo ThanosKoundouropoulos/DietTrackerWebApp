@@ -41,10 +41,8 @@ namespace Application.WeightIns
                 Id = request.WeightIn.Id,
                 AppUser = user,
                 Weight = request.WeightIn.Weight,
-                DateRecorded = request.WeightIn.DateRecorded // Assign string date directly
+                DateRecorded = request.WeightIn.DateRecorded 
             };
-
-              Console.WriteLine("Id Handler2: " + weightIn.Id);
             _context.WeightIns.Add(weightIn);
             user.WeightIns.Add(weightIn);
 

@@ -1,12 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { MealFormValues } from "../models/meal";
 import { Weight, WeightFormValues } from "../models/weight";
 import agent from "../api/agent";
-import { date } from "yup";
-import { each } from "chart.js/helpers";
-import { format, parseISO } from "date-fns";
-
-
 
 export default class WeightStore{
     weightIns: Weight[] = [];
@@ -18,12 +12,9 @@ export default class WeightStore{
     }
 
     createWeightIn = async (weight: WeightFormValues) => {
-      console.error('Weight info ', weight.dateRecorded, weight.weight);
       try {
           this.setCreating(true);
-
           const newWeightIn = new Weight(weight);
-          console.log('Payload to be sent:', newWeightIn); // Log the payload
           await agent.WeightIns.create(weight);
           runInAction(() => this.weightIns.push(newWeightIn));
       } catch (error) {
@@ -37,7 +28,6 @@ export default class WeightStore{
 
     deleteWeight = async ( weightId: string ) => {
         try {
-            console.log('Id to be sent:', weightId);
             await agent.WeightIns.delete(weightId);
             runInAction(() => this.removeWeight(weightId));   
           } catch (error) {
@@ -53,9 +43,7 @@ export default class WeightStore{
             const weights = await agent.WeightIns.list();
             if (weights.length >0) {
               weights.forEach(weight =>{
-                console.error('Weight info ', weight.dateRecorded, weight.weight);
                 runInAction(() => {
-                  // this.weightIns = this.sortWeightsByDate(weights);
                    this.weightIns.push(weight);
                  });
               })
@@ -66,12 +54,6 @@ export default class WeightStore{
             this.loading = false;
           }
     };
-
- 
-    sortWeightsByDate = (weights: Weight[]) => {
-      //  return weights.slice().sort((a, b) => b.date!.getTime() - a.date!.getTime());
-    };
-  
 
     removeWeight = (weightId: string) => {
       this.weightIns = this.weightIns.filter((weight) => weight.id !== weightId);

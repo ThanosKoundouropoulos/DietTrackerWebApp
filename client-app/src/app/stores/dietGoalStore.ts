@@ -1,19 +1,10 @@
-import { makeAutoObservable, runInAction } from "mobx";
-
+import { computed, makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-
-
-
-
 import { store } from "./store";
 import { DietGoal, DietGoalFormValues } from "../models/dietGoal";
 import { Macronutrients } from "../models/macros";
-import { router } from "../router/Routes";
-import { useNavigate } from "react-router-dom";
 import { Food } from "../models/Food";
 import { Meal } from "../models/meal";
-
-
 
 export default class DietGoalStore{
    selectedDietGoal: DietGoal | undefined = undefined;
@@ -28,8 +19,135 @@ export default class DietGoalStore{
    
     
     constructor(){
-        makeAutoObservable(this)
+      makeAutoObservable(this, {
+        totalNutrientsConsumed: computed,
+      });
     }
+
+    get totalNutrientsConsumed() {
+      const foodStore = store.foodStore;
+      const mealStore = store.mealStore;
+  
+      const totalNutrients = {
+        calories: 0,
+        proteins: 0,
+        carbs: 0,
+        fats: 0,
+        caffeine: 0,
+        sugars: 0,
+        fiber: 0,
+        calcium: 0,
+        iron: 0,
+        magnesium: 0,
+        potassium: 0,
+        sodium: 0,
+        zinc: 0,
+        retinol: 0,
+        vitaminA: 0,
+        betaCarotene: 0,
+        vitaminD: 0,
+        vitaminC: 0,
+        folate: 0,
+        vitaminB12: 0,
+        vitaminK: 0,
+        cholesterol: 0,
+        saturatedFattyAcids: 0,
+        monounsaturatedFattyAcids: 0,
+        polyunsaturatedFattyAcids: 0,
+        quantity: 0
+      };
+  
+      const foodTotals = foodStore.foods.reduce((acc, food) => {
+        acc.calories += food.calories ;
+        acc.proteins += food.proteins ;
+        acc.carbs += food.carbs ;
+        acc.fats += food.fats ;
+        acc.caffeine += food.caffeine ;
+        acc.sugars += food.sugars ;
+        acc.fiber += food.fiber ;
+        acc.calcium += food.calcium ;
+        acc.iron += food.iron ;
+        acc.magnesium += food.magnesium ;
+        acc.potassium += food.potassium ;
+        acc.sodium += food.sodium ;
+        acc.zinc += food.zinc ;
+        acc.retinol += food.retinol ;
+        acc.vitaminA += food.vitaminA ;
+        acc.betaCarotene += food.betaCarotene ;
+        acc.vitaminD += food.vitaminD ;
+        acc.vitaminC += food.vitaminC ;
+        acc.folate += food.folate ;
+        acc.vitaminB12 += food.vitaminB12 ;
+        acc.vitaminK += food.vitaminK ;
+        acc.cholesterol += food.cholesterol ;
+        acc.saturatedFattyAcids += food.saturatedFattyAcids ;
+        acc.monounsaturatedFattyAcids += food.monounsaturatedFattyAcids ;
+        acc.polyunsaturatedFattyAcids += food.polyunsaturatedFattyAcids ;
+        return acc;
+      }, { ...totalNutrients });
+  
+      const mealTotals = mealStore.mealEntries.reduce((acc, meal) => {
+        acc.calories += meal.calories ;
+        acc.proteins += meal.proteins ;
+        acc.carbs += meal.carbs ;
+        acc.fats += meal.fats ;
+        acc.caffeine += meal.caffeine ;
+        acc.sugars += meal.sugars ;
+        acc.fiber += meal.fiber ;
+        acc.calcium += meal.calcium ;
+        acc.iron += meal.iron;
+        acc.magnesium += meal.magnesium ;
+        acc.potassium += meal.potassium ;
+        acc.sodium += meal.sodium ;
+        acc.zinc += meal.zinc;
+        acc.retinol += meal.retinol ;
+        acc.vitaminA += meal.vitaminA ;
+        acc.betaCarotene += meal.betaCarotene ;
+        acc.vitaminD += meal.vitaminD ;
+        acc.vitaminC += meal.vitaminC ;
+        acc.folate += meal.folate ;
+        acc.vitaminB12 += meal.vitaminB12 ;
+        acc.vitaminK += meal.vitaminK ;
+        acc.cholesterol += meal.cholesterol;
+        acc.saturatedFattyAcids += meal.saturatedFattyAcids ;
+        acc.monounsaturatedFattyAcids += meal.monounsaturatedFattyAcids ;
+        acc.polyunsaturatedFattyAcids += meal.polyunsaturatedFattyAcids ;
+        return acc;
+      }, { ...totalNutrients });
+  
+      return {
+        ...foodTotals,
+        ...mealTotals,
+        calories: foodTotals.calories + mealTotals.calories,
+        proteins: foodTotals.proteins + mealTotals.proteins,
+        carbs: foodTotals.carbs + mealTotals.carbs,
+        fats: foodTotals.fats + mealTotals.fats,
+        caffeine: foodTotals.caffeine + mealTotals.caffeine,
+        sugars: foodTotals.sugars + mealTotals.sugars,
+        fiber: foodTotals.fiber + mealTotals.fiber,
+        calcium: foodTotals.calcium + mealTotals.calcium,
+        iron: foodTotals.iron + mealTotals.iron,
+        magnesium: foodTotals.magnesium + mealTotals.magnesium,
+        potassium: foodTotals.potassium + mealTotals.potassium,
+        sodium: foodTotals.sodium + mealTotals.sodium,
+        zinc: foodTotals.zinc + mealTotals.zinc,
+        retinol: foodTotals.retinol + mealTotals.retinol,
+        vitaminA: foodTotals.vitaminA + mealTotals.vitaminA,
+        betaCarotene: foodTotals.betaCarotene + mealTotals.betaCarotene,
+        vitaminD: foodTotals.vitaminD + mealTotals.vitaminD,
+        vitaminC: foodTotals.vitaminC + mealTotals.vitaminC,
+        folate: foodTotals.folate + mealTotals.folate,
+        vitaminB12: foodTotals.vitaminB12 + mealTotals.vitaminB12,
+        vitaminK: foodTotals.vitaminK + mealTotals.vitaminK,
+        cholesterol: foodTotals.cholesterol + mealTotals.cholesterol,
+        saturatedFattyAcids: foodTotals.saturatedFattyAcids + mealTotals.saturatedFattyAcids,
+        monounsaturatedFattyAcids: foodTotals.monounsaturatedFattyAcids + mealTotals.monounsaturatedFattyAcids,
+        polyunsaturatedFattyAcids: foodTotals.polyunsaturatedFattyAcids + mealTotals.polyunsaturatedFattyAcids,
+        quantity: foodTotals.quantity + mealTotals.quantity
+      };
+    }
+  
+  
 
     private splitCaloriesToMacros(dailyCalorieIntake: number):Macronutrients{
         const carbsRatio = 0.40; // 40% of total calories
@@ -92,7 +210,6 @@ export default class DietGoalStore{
             newGoal.proteins =macros.protein;
             newGoal.carbs =macros.carbs;
             newGoal.fats =macros.fat;
-            console.log("NEW GOAL :" ,newGoal);
             await agent.DietGoals.create(newGoal);   
             runInAction(() => {
                 this.selectedDietGoal = newGoal; 
@@ -106,32 +223,47 @@ export default class DietGoalStore{
     }
 
     editDietGoal = async (dietGoal: DietGoalFormValues) => {
-        const foodStore = store.foodStore;
-        const mealStore = store.mealStore;
-        const uStore = store.userStore;
-        const dailyCalories = this.calculateCalorieIntake(Number(dietGoal.age), dietGoal.gender, Number(dietGoal.weight), Number(dietGoal.height), Number(dietGoal.activityLevel),dietGoal.plan);
+      const foodStore = store.foodStore;
+      const mealStore = store.mealStore;
+      const uStore = store.userStore;
+  
+      try {
+        const dailyCalories = this.calculateCalorieIntake(
+          Number(dietGoal.age),
+          dietGoal.gender,
+          Number(dietGoal.weight),
+          Number(dietGoal.height),
+          Number(dietGoal.activityLevel),
+          dietGoal.plan
+        );
         const macros = this.splitCaloriesToMacros(await dailyCalories);
-       
-        try {
-            const newGoal = new DietGoal(dietGoal)
-            newGoal.calories =dailyCalories;
-            newGoal.proteins =macros.protein;
-            newGoal.carbs =macros.carbs;
-            newGoal.fats =macros.fat;
-            console.log("NEW GOAL :" ,newGoal);
-           
-            runInAction(() => {
-              foodStore.foods = [];
-              mealStore.mealEntries = [];
-              uStore.updateGoal(newGoal);
-              this.remainingDietGoal = newGoal; 
-            })
-             
-            await agent.DietGoals.update(newGoal);   
-        } catch (error) {
-            console.log(error);
+  
+        const newGoal = new DietGoal(dietGoal);
+        newGoal.calories = dailyCalories;
+        newGoal.proteins = macros.protein;
+        newGoal.carbs = macros.carbs;
+        newGoal.fats = macros.fat;
+
+        for (const food of foodStore.foods) {
+          await agent.DietGoals.deleteFoodEntry(uStore.dietGoal?.id!, food.id);
+          runInAction(() => foodStore.removeFood(food.id));
         }
-    }
+
+        for (const meal of mealStore.mealEntries) {
+          await agent.DietGoals.deleteMealEntry(uStore.dietGoal?.id!, meal.id);
+          runInAction(() => mealStore.removeMealEntry(meal.id));
+        }
+  
+        runInAction(() => {
+          uStore.updateGoal(newGoal);
+          this.remainingDietGoal = newGoal;
+        });
+  
+        await agent.DietGoals.update(newGoal);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     deleteDietGoal = async (goalId: string) => {
         const uStore = store.userStore;
         const foodStore = store.foodStore;
@@ -160,9 +292,7 @@ export default class DietGoalStore{
           amountConsumed: amount,
         };
         try {
-          console.log(`Added food to diet: ${selectedFood.name}, Amount: ${amount}`);
           const existingFood = foodsStore.foods.find((food) => food.id === selectedFood.id);
-
           if (!existingFood) {
             
             runInAction(() => {foodsStore.foods.push(convertedFood);});
@@ -196,7 +326,6 @@ export default class DietGoalStore{
         }
         await agent.Meals.add(selectedMeal.id);
         if (!mealEntry) {
-          console.log(`Added meal to diet: ${selectedMeal.name} with quantity: ${selectedMeal.quantity}`);
           const newMealEntry = { ...selectedMeal }; 
           newMealEntry.quantity = 1; 
           runInAction(() => {
@@ -204,7 +333,6 @@ export default class DietGoalStore{
           });
           this.subtractFromDietGoal(selectedMeal);
         } else {
-          console.log(`Updated meal in diet: ${selectedMeal.name} with quantity: ${mealEntry.quantity + 1}`);
           runInAction(() => {
             mealEntry.quantity += 1;
             mealEntry.calories += selectedMeal.calories;
@@ -214,7 +342,6 @@ export default class DietGoalStore{
           });
           this.subtractFromDietGoal(selectedMeal);
         }
-        console.log(`Meals: ${mealStore.mealEntries.length}`);
       } catch (error) {
         console.error('Error adding meal to diet:', error);
         throw error;
@@ -242,7 +369,6 @@ export default class DietGoalStore{
       const mealStore = store.mealStore
       try {
         const mealToDelete = mealStore.mealEntries.find((meal) => meal.id === mealId);
-        console.log(` meal entry to delete: ${mealToDelete?.name}, Calories: ${mealToDelete?.calories}`);
         await agent.DietGoals.deleteMealEntry(goalId, mealId);
         runInAction(() => mealStore.removeMealEntry(mealId));
         if (mealToDelete) {
@@ -285,7 +411,6 @@ export default class DietGoalStore{
     loadDietGoal = async () => {
         const user = store.userStore.user;
         let dietGoal = this.selectedDietGoal;
-        console.log("LOAD GOAL 2 :" ,dietGoal );
         if (user!.dietGoal) {
             this.selectedDietGoal = user?.dietGoal;
         }
@@ -293,9 +418,7 @@ export default class DietGoalStore{
             this.setLoadingInitial(true);
             try {
                 dietGoal = await agent.DietGoals.details(user!.dietGoal!.id);
-                console.log("LOAD GOAL 3 :" ,dietGoal );
                 runInAction(() => this.selectedDietGoal = dietGoal);
-                console.log("LOAD GOAL 4 ID:" ,this.selectedDietGoal?.id );
                 this.setLoadingInitial(false);
                 return dietGoal;
             } catch (error){
@@ -328,9 +451,7 @@ export default class DietGoalStore{
     }
 
     loadRemainingDietGoal = async (dietGoal: DietGoal) => {
-        
         this.remainingDietGoal = dietGoal;  
-        console.log("Remaining: " ,this.remainingDietGoal.calories);
     }
 
     

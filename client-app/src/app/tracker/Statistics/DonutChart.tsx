@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { observer } from 'mobx-react-lite';
 import { Doughnut } from 'react-chartjs-2';
 import { useStore } from '../../stores/store';

@@ -13,39 +13,18 @@ import DonutChart from "./Statistics/DonutChart";
 import MealsList from "./Meals/MealsList";
 import CreateForm from "./Meals/CreateForm";
 import Tooltip from "../common/Tooltip";
-import RibbonLabel from "../common/RibbonLabel";
 import CreateFromDBForm from "./Meals/CreateFromDBForm";
-
-
-
-
-
+import Nutrition from "./FoodsAndMacros/Nutrition";
 
 
 export default observer(function TrackerView() {
-
+  const [isNutritionOpen, setNutritionOpen] = useState(false);
   const { foodStore ,dietGoalStore ,mealStore} = useStore();
   const {loadFoods,foods} = foodStore;
   const {isCreating,setCreating,isCreatingDB,setCreatingDB,meals,loadMeals,mealEntries,loadMealEntries} = mealStore;
   const {addFoodToDiet,remainingDietGoal} = dietGoalStore;
   const {userStore : {user,dietGoal,hasDietPlan}} = useStore();
   const [results, setResults] = useState<Food[]>([]);
-
-
-
- 
-
-  /*useEffect(() => {
-    if (!user) {
-      console.log('foodStore instance IN TRACKER user load:');
-      getUser();
-    }
-    
-  },[getUser,user])
-  
-  
-  
-  */
 
   useEffect(() => {
       
@@ -58,7 +37,9 @@ export default observer(function TrackerView() {
   }, [user, dietGoal,remainingDietGoal, loadFoods,loadMeals,loadMealEntries]);
 
 
-
+  const handleNutritionClick = () => {
+    setNutritionOpen(true);
+  };
     
   if (foodStore.loadingInitial) return <LoadingComponent content='Loading app'/>
 
@@ -68,10 +49,18 @@ export default observer(function TrackerView() {
       <Grid className="trackerGrid">
        
           <>
-          <div style={{position:'absolute',top:50,right:300,zIndex:1,fontSize: '45px',color:"#233142"}}> 
-          <Tooltip content={<span style={{ fontSize:'15px' }}  >This is your diet goal. Aim to consume the exact amount of calories you need. 
+          <div style={{position:'absolute',top:20,right:360,zIndex:1,fontSize: '45px',color:"#233142"}}> 
+          <Tooltip content={<span style={{ fontSize:'15px' }}  >Aim to consume the exact amount of calories you need. 
             If you want to update your diet goal you can do it in the <span style={{ color: 'teal' }}>Calculator</span> tab.</span>}  />
           </div>
+          <Button
+            icon='nutritionix'
+            onClick={handleNutritionClick} 
+            content='Nutrition'
+            className="nutritionButton global-font"
+          />
+          {isNutritionOpen  && <Nutrition setOpenDetails={setNutritionOpen} />}
+         
           <Grid.Column width='3'>
 
          
@@ -134,14 +123,13 @@ export default observer(function TrackerView() {
                       </div>
                           
                     <svg>
-                        <filter id="fire">
-                            <feTurbulence id="turbulance" baseFrequency="0.1 0.1" numOctaves="2" seed="3">
+                    <filter id="fire">
+                        <feTurbulence id="turbulence" baseFrequency="0.02 0.02" numOctaves="1" seed="3">
                             <animate attributeName="baseFrequency" dur="5s"
-                            values="0.1 0.1;0.12 0.12" repeatCount="indefinite"></animate>
-                            </feTurbulence>
-                            
-                            <feDisplacementMap in="SourceGraphic" scale=" 10"></feDisplacementMap>
-                        </filter>
+                                    values="0.02 0.02;0.03 0.03" repeatCount="indefinite"></animate>
+                        </feTurbulence>
+                        <feDisplacementMap in="SourceGraphic" scale="5"></feDisplacementMap>
+                    </filter>
                     </svg>
                       <div style={{position:'relative',top:150, left:-10}} className="ember global-font">
                         <h1 style={{fontSize:"50px"}}>Lets start !</h1> 

@@ -1,14 +1,12 @@
 
 import { Outlet, useLocation } from 'react-router-dom';
 import NavBar from './NavBar';
-
 import ModalContainer from './common/modals/modalContainer';
 import HomePage from './home/HomePage';
 import { observer } from 'mobx-react-lite';
 import { useStore } from './stores/store';
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { Container } from 'semantic-ui-react';
 import LoadingComponent from './LoadingComponent';
 
 function App() {
@@ -16,7 +14,6 @@ function App() {
   const {commonStore, userStore} = useStore();
   
   useEffect(() => {
-    console.log('* 2App UseEffect loading in useEffect');
     if (commonStore.token) {
       userStore.getUser().finally(() => commonStore.setAppLoaded())
     } else {

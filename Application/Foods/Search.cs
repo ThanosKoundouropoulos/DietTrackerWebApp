@@ -29,30 +29,37 @@ namespace Application.Foods
                 _mapper = mapper;
             }
 
-            public async Task<Result<List<FoodDto>>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<List<FoodDto>>> Handle(Query request, CancellationToken cancellationToken)
+        {
+            try
             {
-                try
-                {
-                    var searchTerm = request.FoodName?.ToLower() ?? string.Empty;
+                var searchTerm = request.FoodName?.ToLower() ?? string.Empty;
 
-                    Console.WriteLine($"Search Term in API: {searchTerm}");
+                Console.WriteLine($"Search Term in API: {searchTerm}");
 
-                    var foods = await _context.Foods
-                        .Where(f => f.Name.ToLower().Contains(searchTerm))
-                        .Take(5)
-                        .ProjectTo<FoodDto>(_mapper.ConfigurationProvider)
-                        .ToListAsync(cancellationToken);
+                var foods = await _context.Foods
+                    .ToListAsync(cancellationToken);
 
-                    Console.WriteLine($"Found {foods.Count} foods in API.");
+                var matchedFoods = foods
+                    .Select(f => new
+                    {
+                        Food = f,
+                        Distance = LevenshteinDistance.Compute(searchTerm, f.Name.ToLower())
+                    })
+                    .Where(x => x.Distance <= 15) 
+                    .OrderBy(x => x.Distance)
+                    .Take(5)
+                    .Select(x => _mapper.Map<FoodDto>(x.Food))
+                    .ToList();
 
-                    return Result<List<FoodDto>>.Success(foods);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    return Result<List<FoodDto>>.Failure("An error occurred while processing the request.");
-                }
+                return Result<List<FoodDto>>.Success(matchedFoods);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return Result<List<FoodDto>>.Failure("An error occurred while processing the request.");
+            }
+        }
         }
     }
 }

@@ -124,6 +124,30 @@ body{
     transform: translate(-50%, -50%);
     color: #D3D3D3;
   }
+
+  @keyframes glow {
+    0% {
+        text-shadow: 0 0 10px #ff8c3b,
+                     0 0 20px #ff8c3b,
+                     0 0 30px #ff8c3b,
+                     0 0 40px #ff8c3b,
+                     0 0 50px #ff8c3b;
+    }
+    50% {
+        text-shadow: 0 0 20px #ff8c3b,
+                     0 0 30px #ff8c3b,
+                     0 0 40px #ff8c3b,
+                     0 0 50px #ff8c3b,
+                     0 0 60px #ff8c3b;
+    }
+    100% {
+        text-shadow: 0 0 10px #ff8c3b,
+                     0 0 20px #ff8c3b,
+                     0 0 30px #ff8c3b,
+                     0 0 40px #ff8c3b,
+                     0 0 50px #ff8c3b;
+    }
+}
   
   .homepage .homepageCont .title {
     position: relative;
@@ -162,11 +186,7 @@ body{
     font-size: 25px;
     font-weight: 600;
     color: #ffeb3b;
-    text-shadow: 0 0 10px #ff8c3b,
-                0 0 40px #ff8c3b,
-                0 0 80px #ff8c3b,
-                0 0 160px #ff8c3b,
-                0 0 240px #ff8c3b;
+    animation: glow 5s infinite;
     filter: url(#fire);
   }
 
@@ -329,6 +349,36 @@ body{
 }
 /*tracker */
 
+.trackerGrid .nutritionButton{
+  position: absolute;
+  z-index: 1;
+  background-color: lightgreen;
+  color: black;
+  top: 50px;
+  right:218px ;
+  height:50px;
+  width: 150px;
+  border-radius: 5px;
+  border: 3px solid #233142;
+  border-color: black;
+  box-shadow: 0 0 15px;
+}
+
+.trackerGrid .nutritionContainer{
+  position: absolute;
+  z-index: 2;
+  top: 110px;
+  right:218px ;
+  width: 300px;
+  height: 500px;
+  border-radius: 5px;
+  border: 3px solid lightgreen;
+  background-color: snow;
+  box-shadow: 0 0 15px;
+  overflow: auto;
+  padding: 10px;
+}
+
 .trackerGrid .statsContainer {
   position: absolute;
   top: -20px;
@@ -337,7 +387,7 @@ body{
   height: 680px;
   width: 330px;
   border-radius: 5px;
-  border: 4px solid #233142;
+  border: 3px solid #233142;
   border-color: black;
   box-shadow: 0 0 15px;
 }
@@ -365,7 +415,7 @@ body{
   align-items: baseline;
   border-radius: 5px;
   background-color: #233142;
-  border: 4px solid black;
+  border: 3px solid black;
   box-shadow: 0 0 10px;
 }
 
@@ -384,13 +434,13 @@ body{
   z-index: 1;
   position: relative;
   overflow-y: scroll;
-  top: 75px;
-  left: -96px;
+  top: 85px;
+  left: -93px;
   background-color: #233142;
-  height: 554px;
+  height: 558px;
   width: 800px;
   border-radius: 5px;
-  border: 4px solid black;
+  border: 3px solid black;
   box-shadow: 0 0 10px;
   display: flex;
   flex-direction: column; 
@@ -638,7 +688,7 @@ body{
   height: 545px;
   width: 300px;
   border-radius: 5px;
-  border: 4px solid black;
+  border: 3px solid black;
   box-shadow: 0 0 10px;
 
 }
@@ -647,12 +697,12 @@ body{
   position: absolute;
   top: 90px;
   right: 200px;
-  height: 550px;
+  height: 565px;
   width: 350px;
   padding: 15px;
   background-color: #233142;
   border-radius: 5px;
-  border: 4px solid black;
+  border: 3px solid black;
   box-shadow: 0 0 10px;
 }
 .custom-table {
@@ -668,6 +718,7 @@ body{
   background-color: #455d7a !important;
   color: black !important;
 }
+
 
 .trackerGrid .mealForm .macrosInput{
     height: 40px;
@@ -757,10 +808,22 @@ body{
   top: -10px;
   left: 30px;
   width: 240px;
-  height:240px;
-  border: #233142;
-  background-color: #455d7a;
+  height: 280px;
+  background-color: lightslategray;
   box-shadow: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+ .card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+ .card-content .card-meta {
+  color: black !important;
 }
 
 .trackerGrid .mealsContainer .mealBtn {
@@ -876,7 +939,7 @@ body{
   background-color: #233142;
   height: 550px;
   border-radius: 5px;
-  border: 4px solid black;
+  border: 3px solid black;
   box-shadow: 0 0 10px;
   text-align: center;
   align-items: baseline;
@@ -891,7 +954,7 @@ body{
     left: 10px;
     width: 270px;
     height: 60vh;
-    border: 4px solid black;
+    border: 3px solid black;
     padding: 10px;
 }
 .weightContainer .weightListContainer .meal-wrapper{
@@ -934,7 +997,7 @@ body{
   width: 230px;
   padding: 10px;
   border-radius: 5px;
-  border: 4px solid black;
+  border: 3px solid black;
   box-shadow: 0 0 10px;
 }
 
@@ -946,7 +1009,7 @@ body{
   background-color: #233142;
   height: 550px;
   border-radius: 5px;
-  border: 4px solid black;
+  border: 3px solid black;
   box-shadow: 0 0 10px;
 }
 .calculator{

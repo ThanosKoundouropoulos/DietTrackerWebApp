@@ -28,10 +28,6 @@ namespace Application.Goals
 
             public async Task<Result<DietGoalDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-
-                /*var dietGoal = await _contex.DietGoals.Include(f => f.Foods)
-                    .ProjectTo<DietGoalDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(x => x.Id == request.Id);*/
                     var dietGoal = await _contex.DietGoals
                         .Include(d => d.Foods)
                         .Where(d => d.Id == request.Id)

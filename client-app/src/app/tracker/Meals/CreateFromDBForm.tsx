@@ -5,13 +5,6 @@ import NutrientsTable from "./NutrientsTable";
 import IngredientsForm from "./IngredientsForm";
 
 
-
-
-
-
-
-
-
 export default observer(function CreateForm() {
    
   

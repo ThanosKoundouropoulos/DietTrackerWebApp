@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { FaSearch } from "react-icons/fa";
 import { GiChickenLeg,GiAvocado ,GiFlame} from 'react-icons/gi';
 import { FaBreadSlice } from 'react-icons/fa';
-import { Button, Container, Header, Input } from "semantic-ui-react";
+import { Container, Header } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 

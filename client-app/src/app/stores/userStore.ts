@@ -64,7 +64,6 @@ export default class UserStore {
     getUser = async () => {
         try {
             const user = await agent.Account.current();
-            console.log("1User : " ,user?.displayName ,"Goal : " , user?.dietGoal?.calories );
             runInAction(() =>{ 
                 this.user = user;
                 this.dietGoal= user.dietGoal!;
@@ -86,7 +85,10 @@ export default class UserStore {
       };
 
     updateGoal =(dietGoal: DietGoal) => {
-        this.dietGoal = dietGoal; 
+        this.dietGoal!.calories = dietGoal.calories; 
+        this.dietGoal!.proteins = dietGoal.proteins; 
+        this.dietGoal!.carbs = dietGoal.carbs; 
+        this.dietGoal!.fats = dietGoal.fats; 
     }
 
 

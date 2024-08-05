@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { useStore } from '../stores/store';
 import MyTextInput from '../common/forms/MyTextInput';
-import { values } from 'mobx';
 import { Button, Container, Header, Icon, Label } from 'semantic-ui-react';
 
 

@@ -77,28 +77,24 @@ namespace API.Controllers
                 
             [Authorize]
             [HttpGet]
-          public async Task<ActionResult<UserDto>> GetCurrentUser()
-            {
-                var user = await _userManager.Users
-                    .Include(d => d.DietGoal) // Include DietGoal navigation property
-                    .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
-
-                // If user exists and DietGoal exists, return user with DietGoal
-                if (user != null && user.DietGoal != null)
+            public async Task<ActionResult<UserDto>> GetCurrentUser()
                 {
-                    Console.Write("*** User with DietGoal: " + user.DietGoal.calories);
-                    return CreateUserObject(user);
+                    var user = await _userManager.Users
+                        .Include(d => d.DietGoal) 
+                        .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+                    if (user != null && user.DietGoal != null)
+                    {
+                        return CreateUserObject(user);
+                    }
+                    else if (user != null) 
+                    {
+                        return CreateUserObjectOnly(user);
+                    }
+                    else 
+                    {
+                        return NotFound();
+                    }
                 }
-                else if (user != null) // If user exists but DietGoal does not exist, return user only
-                {
-                    Console.Write("*** User without DietGoal");
-                    return CreateUserObjectOnly(user);
-                }
-                else // If user does not exist, return NotFound
-                {
-                    return NotFound();
-                }
-            }
 
             private UserDto CreateUserObject(AppUser user)
             {

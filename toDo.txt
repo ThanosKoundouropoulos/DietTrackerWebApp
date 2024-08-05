@@ -1,10 +1,10 @@
 
-1. γραμμαρια επιλογη η 100αδες
-2. επιλογη φαγητων για create meal από την λίστα blueprint dietorganizer
-3. μακροστοιχεια display 
-4. φαγητα βαση δεδομένων json αρχεια json serializers  
-5. οταν κανω create goal να γινεται refresh και να εμφανιζεται
-6. filter API responses max 10
+1. γραμμαρια επιλογη η 100αδες  OK
+2. επιλογη φαγητων για create meal από την λίστα blueprint dietorganizer OK
+3. μακροστοιχεια display  OK
+4. φαγητα βαση δεδομένων json αρχεια json serializers   OK
+5. οταν κανω create goal να γινεται refresh και  να εμφανιζεται OK
+6. filter API responses max 10  OK 
 
  20% user manual 70% ypoloipo 10% modules and technologies,
 visio super sxhma 

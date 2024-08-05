@@ -1,18 +1,7 @@
 import { observer } from "mobx-react-lite";
-import { Fragment } from "react";
-
-import { Container, Header, Segment } from "semantic-ui-react";
-
+import { Container } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 import WeightEntryItem from "./weightEntryItem";
-
-
-
-
-
-
-
-
 
 export default observer(function WeightEntryList(){
     const {weightStore} = useStore();

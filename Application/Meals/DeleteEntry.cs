@@ -30,7 +30,6 @@ namespace Application.Meals
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                Console.Write("KANOUME DELETE SXESH");
                 var dietGoalMeal = await _context.DietGoalMeals
                     .FirstOrDefaultAsync(dgm => dgm.GoalId == request.GoalId && dgm.MealId == request.MealId, cancellationToken);
 

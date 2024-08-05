@@ -39,6 +39,12 @@ export default observer(function MealListItem({ meal }: Props) {
       deleteMeal(meal.id);
   };
 
+  function round(value: number, precision: number) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+  }
+
+
   return (
     <>
         <Segment className="meal-wrapper">
@@ -52,13 +58,13 @@ export default observer(function MealListItem({ meal }: Props) {
 
         {openDetails && (
             <Card className="meal-details-card global-font">
-            <Card.Content>
-                <Card.Header ><h1>{meal.name}</h1></Card.Header>
-                <CardDescription><h3>{meal.description}</h3></CardDescription>
-                <Card.Meta >Calories: {meal.calories}</Card.Meta>
-                <Card.Meta>Proteins: {meal.proteins}</Card.Meta>
-                <Card.Meta>Carbs: {meal.carbs}</Card.Meta>
-                <Card.Meta>Fats: {meal.fats}</Card.Meta>
+            <Card.Content className='global-font card-content'>
+                <Card.Header className='global-font'>{meal.name}</Card.Header>
+                <CardDescription >{meal.description}</CardDescription>
+                <Card.Meta className='global-font card-meta' >Calories: {round(meal.calories, 1)}</Card.Meta>
+                <Card.Meta className='global-font card-meta'>Proteins: {round(meal.proteins,1)}</Card.Meta>
+                <Card.Meta className='global-font card-meta'>Carbs: {round(meal.carbs,1)}</Card.Meta>
+                <Card.Meta className='global-font card-meta'>Fats: {round(meal.fats,1)}</Card.Meta>
             </Card.Content>
             <Card.Content extra>
                 <Button className='global-font' negative onClick={() => setOpenDetails(false)}>

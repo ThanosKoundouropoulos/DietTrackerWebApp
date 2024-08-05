@@ -23,17 +23,6 @@ namespace API.Extensions
                 options.UseSqlite(config.GetConnectionString("DefaultConnection"))
                     .EnableSensitiveDataLogging()
             );
-            /*services.AddControllersWithViews()
-            .AddJsonOptions(options =>
-                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-
-            services.AddControllers().AddJsonOptions(options =>
-{
-                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-            });*/
-           
-
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>

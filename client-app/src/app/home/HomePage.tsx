@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 import { useStore } from "../stores/store";
-
 import { Button, Container, Header, Segment,Image } from "semantic-ui-react";
 import LoginForm from "../userForms/LoginForm";
 import RegisterForm from "../userForms/RegisterForm";
@@ -29,12 +28,11 @@ export default observer(function HomePage(){
                
                 <svg>
                     <filter id="fire">
-                        <feTurbulence id="turbulance" baseFrequency="0.1 0.1" numOctaves="2" seed="3">
-                        <animate attributeName="baseFrequency" dur="5s"
-                        values="0.1 0.1;0.12 0.12" repeatCount="indefinite"></animate>
+                        <feTurbulence id="turbulence" baseFrequency="0.02 0.02" numOctaves="1" seed="3">
+                            <animate attributeName="baseFrequency" dur="5s"
+                                    values="0.02 0.02;0.03 0.03" repeatCount="indefinite"></animate>
                         </feTurbulence>
-                        
-                        <feDisplacementMap in="SourceGraphic" scale=" 10"></feDisplacementMap>
+                        <feDisplacementMap in="SourceGraphic" scale="5"></feDisplacementMap>
                     </filter>
                 </svg>
                 

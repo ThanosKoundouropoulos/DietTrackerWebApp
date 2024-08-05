@@ -4,11 +4,9 @@ import { FaSearch } from "react-icons/fa";
 import { Button, Container, Input } from "semantic-ui-react";
 import { Food } from "../../models/Food";
 import {v4 as uuid} from 'uuid';
-import foodStore from "../../stores/foodStore";
 import { useStore } from "../../stores/store";
 import { SearchResultsList } from "../Searching/SearchResultList";
 import IngredientsList from "./IngredientsList";
-import MyTextInput from "../../common/forms/MyTextInput";
 import { Link } from "react-router-dom";
 import { MealFormValues } from "../../models/meal";
 
@@ -47,12 +45,9 @@ export default observer(function IngredientsForm() {
     const handleAddFood = () => {
       let amount = parseFloat(inputGr);
       if (!isNaN(amount)) {
-
-        console.error('Food name as input:', input);
         const selectedFood = foodStore.selectFood(input);
   
         if (selectedFood) {
-          console.error('Food name after selection:', selectedFood.name);
           addIngredient(selectedFood, amount);
           setInput("");
           setInputGr("");
@@ -68,11 +63,9 @@ export default observer(function IngredientsForm() {
         
     function handleFormSubmit() {
       
-
       const newMeal = new MealFormValues();
       newMeal.id = uuid();
       newMeal.name = inputNameValue;
-     
       createMealFromIngredients(newMeal);
       setCreatingDB(false);
     }
@@ -138,5 +131,3 @@ export default observer(function IngredientsForm() {
 
     )
   });
-
- // <MyTextInput  placeholder="Food name" name="name"/>

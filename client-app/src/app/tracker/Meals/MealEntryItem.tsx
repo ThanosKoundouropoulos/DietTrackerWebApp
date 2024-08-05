@@ -1,8 +1,6 @@
-import React from 'react';
 import { GiChickenLeg,GiAvocado ,GiFlame} from 'react-icons/gi';
 import { FaBreadSlice } from 'react-icons/fa';
-import { Item, Button, Label, Segment, Grid, Header } from 'semantic-ui-react';
-import { Food } from '../../models/Food';
+import { Button, Segment, Header } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../stores/store';
 import { Meal } from '../../models/meal';
@@ -23,13 +21,12 @@ export default observer(function MealEntryItem({ meal }: Props) {
   const {dietGoal} = userStore
 
   const handleDelete = async () => {
-    console.error('Deleting meal entry with name :', meal.name);
     deleteMealEntry(dietGoal!.id ,meal.id );
   };
 
   return (
     <Segment  className="food-wrapper">
-      <Header as='h1' floated="left" className="macros global-font" size='medium'>{meal.quantity} entries of</Header>
+      <Header as='h1' floated="left" className="macros global-font" size='medium'>{meal.quantity}</Header>
       <Header as='h1' floated="left" className="macros global-font" size='medium'>{meal.name}</Header>
       <Header as='h1' floated="left" className="macros global-font">
         <GiFlame className="icons flame" size="35px" /> {round(meal.calories, 1)}

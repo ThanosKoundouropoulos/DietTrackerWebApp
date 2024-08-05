@@ -1,5 +1,4 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-
 import LoginForm from "../userForms/LoginForm";
 import TrackerView from "../tracker/TrackerView";
 import Progress from "../progress/Progress";

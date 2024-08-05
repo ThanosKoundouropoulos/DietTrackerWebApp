@@ -1,23 +1,15 @@
 import { observer } from "mobx-react-lite";
-import { Button, Card, CardDescription, Container, Form, Header, Image } from "semantic-ui-react";
+import { Button, Container, Form, Header, Image } from "semantic-ui-react";
 import { useStore } from "../stores/store";
 import WeightEntryList from "./WeightEntryList";
 import { useState } from "react";
 import {v4 as uuid} from 'uuid';
 import { WeightFormValues } from "../models/weight";
-import { format, parseISO } from "date-fns";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import MyDateInput from "../common/forms/MyDateInput";
 import MyMacrosInput from "../common/forms/MyMacrosInput";
 import LoadingPlaceholder from "../common/LoadingPlaceholder";
-
-
-
-
-
-
-
 
 export default observer(function WeightHistory() {
   const { weightStore } = useStore();
@@ -109,27 +101,3 @@ export default observer(function WeightHistory() {
   );
 });
 
-
-
-/*<Form>
-            <Header as="h2" inverted className="macros">
-              Add Weight Entry
-            </Header>
-            <Form.Input
-              type="number"
-              label="Weight"
-              placeholder="Enter weight"
-              value={weight}
-              onChange={(e) => setWeight(Number(e.target.value))}
-              required
-            />
-            <Form.Input
-              type="date"
-              label="Date"
-              value={format(date, 'yyyy-MM-dd')}
-              onChange={(e) => setDate(new Date(e.target.value))}
-              required
-            />
-            <Button positive content="Submit" onClick={handleSubmit} />
-            <Button content="Cancel" onClick={onCancel} color="red" />
-          </Form>*/
