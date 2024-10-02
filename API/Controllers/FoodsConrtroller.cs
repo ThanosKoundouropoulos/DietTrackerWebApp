@@ -22,7 +22,6 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFoods()
         {
-          
             return HandleResult(await Mediator.Send(new List.Query()));
           
             

@@ -23,7 +23,7 @@ export default observer(function RegisterForm(){
             {({handleSubmit, isSubmitting,errors, isValid,dirty}) => (
                 <Form className="ui form error" onSubmit={handleSubmit} autoComplete="off">
                     <Container className='modalContainerRegister'>
-                        <Header className="global-font" as='h2' content='Sign Up to Reactivities' color="teal" textAlign="center"/>
+                        <Header className="global-font" as='h2' content='Sign Up' color="teal" textAlign="center"/>
                         <div style={{position:'relative', top:-5}}>
                             <MyTextInput placeholder="Username" name="username"/>
                         </div>

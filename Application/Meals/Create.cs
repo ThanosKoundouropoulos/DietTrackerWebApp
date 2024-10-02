@@ -55,7 +55,7 @@ namespace Application.Meals
                         proteins = request.Meal.proteins,
                         carbs = request.Meal.carbs,
                         fats = request.Meal.fats,
-                        Caffeine = request.Meal.Caffeine,
+                         Caffeine = request.Meal.Caffeine,
                         Sugars = request.Meal.Sugars,
                         Fiber = request.Meal.Fiber,
                         Calcium = request.Meal.Calcium,

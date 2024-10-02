@@ -7,9 +7,8 @@ import FoodStore from "./foodStore";
 import MealStore from "./mealStore";
 import WeightStore from "./weightStore";
 
-//This file is the store that is goin to store our stores 
+//This file is the store that is going to store our stores 
 interface Store {
-  
     commonStore: CommonStore;
     userStore: UserStore;
     modalStore: ModalStore;

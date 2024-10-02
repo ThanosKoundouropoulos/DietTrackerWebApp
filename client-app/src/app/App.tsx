@@ -24,7 +24,7 @@ function App() {
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
   return (
     <>
-       <ModalContainer/>
+      <ModalContainer/>
       <ToastContainer position='bottom-right' hideProgressBar theme='colored'/>
         {location.pathname === '/' ? <HomePage /> : (
           <>

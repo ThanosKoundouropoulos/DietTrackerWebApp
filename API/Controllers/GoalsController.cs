@@ -29,6 +29,7 @@ namespace API.Controllers
 
 
         [AllowAnonymous]
+        
         [HttpPost]
         public async Task<IActionResult> CreateDietGoals(DietGoal dtgoal)
         {                                                 
