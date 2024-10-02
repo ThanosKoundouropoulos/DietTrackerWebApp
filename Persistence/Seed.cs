@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using Domain;
 using Microsoft.AspNetCore.Identity;
@@ -5,9 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-      public class Seed
+    public class Seed
     {
-         private const int BatchSize = 1000;
+        private const int BatchSize = 5;
+
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
             if (!userManager.Users.Any() && !context.DietGoals.Any())
@@ -33,7 +35,8 @@ namespace Persistence
 
                 await context.DietGoals.AddRangeAsync(dietGoals);
 
-                await InsertFoodsInBatches(context, "C:/Users/thano/Desktop/testFoods.json", "C:/Users/thano/Desktop/testBrandFoods.json");
+                await InsertFoodsInBatches(context, "C:/Users/thano/Desktop/FoodData_Central_survey_food_json_2022-10-28.json", 
+                                                    "C:/Users/thano/Desktop/brandedDownload2.json");
                 await context.Database.ExecuteSqlRawAsync("VACUUM");
                 await context.SaveChangesAsync();
             }
@@ -45,55 +48,96 @@ namespace Persistence
 
             foreach (var filePath in filePaths)
             {
-                if (filePath.Contains("testFoods.json"))
+                if (filePath.Contains("FoodData_Central_survey_food_json_2022-10-28.json"))
                 {
-                    foods.AddRange(await ReadSurveyFoodsFromJsonFileAsync(filePath));
+                    await foreach (var food in ReadSurveyFoodsFromJsonStreamAsync(filePath))
+                    {
+                        foods.Add(food);
+                        if (foods.Count >= BatchSize)
+                        {
+                            await SaveBatchAsync(context, foods);
+                            foods.Clear();
+                        }
+                    }
                 }
-                else if (filePath.Contains("testBrandFoods.json"))
+                else if (filePath.Contains("brandedDownload2.json"))
                 {
-                    foods.AddRange(await ReadBrandedFoodsFromJsonFileAsync(filePath));
+                    await foreach (var food in ReadBrandedFoodsFromJsonStreamAsync(filePath))
+                    {
+                        foods.Add(food);
+                        if (foods.Count >= BatchSize)
+                        {
+                            await SaveBatchAsync(context, foods);
+                            foods.Clear();
+                        }
+                    }
                 }
             }
 
-            var batchCount = (foods.Count + BatchSize - 1) / BatchSize;
-
-            for (var i = 0; i < batchCount; i++)
+            if (foods.Any())
             {
-                var batch = foods.Skip(i * BatchSize).Take(BatchSize).ToList();
-                using (var transaction = await context.Database.BeginTransactionAsync())
+                await SaveBatchAsync(context, foods);
+            }
+        }
+
+       private static async Task SaveBatchAsync(DataContext context, List<Food> foods)
+        {
+            using (var transaction = await context.Database.BeginTransactionAsync())
+            {
+                try
                 {
-                    await context.Foods.AddRangeAsync(batch);
+                    await context.Foods.AddRangeAsync(foods);
                     await context.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
+                catch (Exception ex)
+                {
+                    // Log the exception message for debugging
+                    Console.WriteLine($"Error saving batch: {ex.Message}");
+                    await transaction.RollbackAsync();
+                    throw; // Rethrow to notify higher-level logic of the failure
+                }
             }
         }
 
-        private static async Task<List<Food>> ReadSurveyFoodsFromJsonFileAsync(string filePath)
+        private static async IAsyncEnumerable<Food> ReadSurveyFoodsFromJsonStreamAsync(string filePath)
         {
-            var json = await File.ReadAllTextAsync(filePath);
-            var surveyFoodWrapper = JsonSerializer.Deserialize<SurveyFoodWrapper>(json);
-
-            if (surveyFoodWrapper != null && surveyFoodWrapper.SurveyFoods != null)
+            await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 8192, useAsync: true);
+            
+            // Read the entire JSON file in one go into a JsonDocument
+            var jsonDoc = await JsonDocument.ParseAsync(stream);
+            
+            var foodsArray = jsonDoc.RootElement.GetProperty("SurveyFoods");
+            
+            foreach (var foodElement in foodsArray.EnumerateArray())
             {
-                return surveyFoodWrapper.SurveyFoods.Select(Food.FromJson).ToList();
+                var foodData = JsonSerializer.Deserialize<FoodData>(foodElement.GetRawText());
+                if (foodData != null)
+                {
+                    yield return Food.FromJson(foodData);
+                }
             }
-
-            return new List<Food>();
         }
 
-        private static async Task<List<Food>> ReadBrandedFoodsFromJsonFileAsync(string filePath)
+private static async IAsyncEnumerable<Food> ReadBrandedFoodsFromJsonStreamAsync(string filePath)
+{
+    await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 8192, useAsync: true);
+    
+    // Read the entire JSON file in one go into a JsonDocument
+    var jsonDoc = await JsonDocument.ParseAsync(stream);
+    
+    var foodsArray = jsonDoc.RootElement.GetProperty("BrandedFoods");
+    
+    foreach (var foodElement in foodsArray.EnumerateArray())
+    {
+        var foodData = JsonSerializer.Deserialize<FoodData>(foodElement.GetRawText());
+        if (foodData != null)
         {
-            var json = await File.ReadAllTextAsync(filePath);
-            var brandedFoodWrapper = JsonSerializer.Deserialize<BrandedFoodWrapper>(json);
-
-            if (brandedFoodWrapper != null && brandedFoodWrapper.BrandedFoods != null)
-            {
-                return brandedFoodWrapper.BrandedFoods.Select(Food.FromJson).ToList();
-            }
-
-            return new List<Food>();
+            yield return Food.FromJson(foodData);
         }
+    }
+}
+       
     }
 
 }
