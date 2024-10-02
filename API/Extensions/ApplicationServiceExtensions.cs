@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using Application.Core;
 using Application.Goals;
 using Application.Interfaces;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +21,7 @@ namespace API.Extensions
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-           services.AddDbContext<DataContext>(options =>
+            services.AddDbContext<DataContext>(options =>
                 options.UseSqlite(config.GetConnectionString("DefaultConnection"))
                     .EnableSensitiveDataLogging()
             );
@@ -32,6 +34,8 @@ namespace API.Extensions
             });
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<Create>();
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor ,UserAccessor>();
             return services;
