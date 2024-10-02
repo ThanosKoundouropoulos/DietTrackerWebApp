@@ -9,7 +9,11 @@ namespace Domain
         public float proteins { get; set; }
         public float carbs { get; set; }
         public float fats { get; set; }
-        public ICollection<DietGoalMeals> DietGoals  { get; set; }
+        public int quantity { get; set; }
+        public Guid? DietGoalId { get; set; }
+        public DietGoal DietGoal { get; set; }
+        public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; } 
 
             // New macronutrient fields
         public double Caffeine { get; set; }

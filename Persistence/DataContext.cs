@@ -14,7 +14,6 @@ namespace Persistence
         public DbSet<Food> Foods {get; set;}
         public DbSet<DietGoalFoods> DietGoalFoods {get; set;}
         public DbSet<Meal> Meals { get; set; }
-        public DbSet<DietGoalMeals> DietGoalMeals { get; set; }
         public DbSet<WeightIn> WeightIns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -38,20 +37,6 @@ namespace Persistence
                 .HasOne(f => f.DietGoal)
                 .WithMany(g => g.Foods)
                 .HasForeignKey(df => df.GoalId);
-
-            builder.Entity<DietGoalMeals>(x => x.HasKey(dm => new{dm.MealId, dm.GoalId}));
-
-            builder.Entity<DietGoalMeals>()
-                .HasOne(dgm => dgm.Meal)
-                .WithMany(dg => dg.DietGoals)
-                .HasForeignKey(dgm => dgm.MealId);
-                
-            builder.Entity<DietGoalMeals>()
-                .HasOne(dgm => dgm.DietGoal)
-                .WithMany(dg => dg.Meals)
-                .HasForeignKey(dgm => dgm.GoalId);
-
-        
 
              builder.Entity<WeightIn>()
                 .HasOne(w => w.AppUser)

@@ -22,31 +22,45 @@ namespace Application.Meals
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context)
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context ?? throw new ArgumentNullException(nameof(context));
+                _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var dietGoalMeal = await _context.DietGoalMeals
-                    .FirstOrDefaultAsync(dgm => dgm.GoalId == request.GoalId && dgm.MealId == request.MealId, cancellationToken);
-
-                if (dietGoalMeal == null)
+                try
                 {
-                    return Result<Unit>.Failure("Diet goal meal not found.");
-                }
-                
-                _context.Remove(dietGoalMeal);
-                var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+                    var userName = _userAccessor.GetUsername();
 
-                if (!result)
+                    if (string.IsNullOrEmpty(userName))
+                    {
+                        return Result<Unit>.Failure("Username is null or empty.");
+                    }
+
+                    // Retrieve the meal directly by MealId and include the associated DietGoal
+                    var meal = await _context.Meals
+                        .FirstOrDefaultAsync(m => m.Id == request.MealId && m.DietGoalId == request.GoalId, cancellationToken);
+
+                    if (meal == null)
+                    {
+                        return Result<Unit>.Failure("Meal not found or not associated with the specified diet goal.");
+                    }
+
+                    // Disassociate the meal from the diet goal
+                    meal.DietGoalId = null;
+
+                    // Save changes to the database
+                    var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+                    return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem updating database.");
+                }
+                catch (Exception ex)
                 {
-                    return Result<Unit>.Failure("Failed to delete meal from diet goal.");
+                    return Result<Unit>.Failure($"Problem removing meal: {ex.Message}");
                 }
-
-                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

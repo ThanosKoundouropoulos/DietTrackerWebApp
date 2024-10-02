@@ -35,15 +35,12 @@ namespace Application.Meals
                 try
                 {
                     var userName = _userAccessor.GetUsername();
+                     var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName, cancellationToken);
 
                     if (string.IsNullOrEmpty(userName))
                     {
                         return Result<Unit>.Failure("Username is null or empty.");
                     }
-
-                    var user = await _context.Users
-                        .Include(u => u.DietGoal)
-                        .FirstOrDefaultAsync(x => x.UserName == userName, cancellationToken);
 
                     if (user == null)
                     {
@@ -78,10 +75,12 @@ namespace Application.Meals
                         Cholesterol = request.Meal.Cholesterol,
                         SaturatedFattyAcids = request.Meal.SaturatedFattyAcids,
                         MonounsaturatedFattyAcids = request.Meal.MonounsaturatedFattyAcids,
-                        PolyunsaturatedFattyAcids = request.Meal.PolyunsaturatedFattyAcids
+                        PolyunsaturatedFattyAcids = request.Meal.PolyunsaturatedFattyAcids,
+                        quantity= request.Meal.quantity
                         
                     };
                     _context.Meals.Add(newMeal);
+                    user.Meals.Add(newMeal);
                     var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
                     return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem updating database.");

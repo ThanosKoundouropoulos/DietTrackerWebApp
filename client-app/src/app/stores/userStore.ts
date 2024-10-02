@@ -55,9 +55,16 @@ export default class UserStore {
     }
 
     logout =() => {
+        const mealStore = store.mealStore;
+        const foodStore = store.foodStore;
+        const wStore = store.weightStore;
         store.commonStore.setToken(null);
         this.user = null;
         this.dietGoal = null;
+        mealStore.meals.length =0;
+        mealStore.mealEntries.length=0;
+        foodStore.foods.length=0;
+        wStore.weightIns.length =0;
         router.navigate('/');
     }
 

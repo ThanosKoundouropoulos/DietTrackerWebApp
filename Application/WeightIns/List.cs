@@ -15,7 +15,7 @@ namespace Application.WeightIns
    
     public class List
     {
-        public class Query : IRequest<Result<List<WeightInDto>>>
+       public class Query : IRequest<Result<List<WeightInDto>>>
         {
         }
 
@@ -54,5 +54,6 @@ namespace Application.WeightIns
                 return Result<List<WeightInDto>>.Success(weightIns);
             }
         }
+
     }
 }

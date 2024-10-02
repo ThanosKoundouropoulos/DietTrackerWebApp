@@ -16,7 +16,6 @@ namespace Application.Core
             CreateMap<Food, FoodDto>();
             CreateMap<DietGoalFoods, FoodDto>();
             CreateMap<Meal, MealDto>();
-            CreateMap<DietGoalMeals, MealDto>();
             CreateMap<WeightIn, WeightInDto>();
                
         }

@@ -145,7 +145,7 @@ export default class MealStore{
       newMeal.saturatedFattyAcids = totalNutrients.saturatedFattyAcids;
       newMeal.monounsaturatedFattyAcids = totalNutrients.monounsaturatedFattyAcids;
       newMeal.polyunsaturatedFattyAcids = totalNutrients.polyunsaturatedFattyAcids;
-
+      console.log('meal to creat:', newMeal);
       await agent.Meals.create(newMeal);
   
       this.ingredients = [];

@@ -30,10 +30,11 @@ namespace Application.Meals
                  _userAccessor = userAccessor;
             }
 
-            public async Task<Result<List<ConsumedMealDto>>> Handle(Query request, CancellationToken cancellationToken)
+          public async Task<Result<List<ConsumedMealDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                  var user = await _context.Users
+                var user = await _context.Users
                     .Include(u => u.DietGoal)
+                    .Include(u => u.Meals)
                     .FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
 
                 if (user == null || user.DietGoal == null)
@@ -41,44 +42,43 @@ namespace Application.Meals
                     return Result<List<ConsumedMealDto>>.Failure("User or diet goal not found.");
                 }
 
-                var dietGoalMeals = await _context.DietGoalMeals
-                    .Include(df => df.Meal)
-                    .Where(df => df.GoalId == user.DietGoal.Id)
-                    .Select(df => new ConsumedMealDto
-                        {
-                            Id = df.Meal.Id,
-                            name = df.Meal.name,
-                            description = df.Meal.description,
-                            calories = df.Meal.calories,
-                            proteins = df.Meal.proteins,
-                            carbs = df.Meal.carbs,
-                            fats = df.Meal.fats,
-                            Caffeine = df.Meal.Caffeine,
-                            Sugars = df.Meal.Sugars,
-                            Fiber = df.Meal.Fiber,
-                            Calcium = df.Meal.Calcium,
-                            Iron = df.Meal.Iron,
-                            Magnesium = df.Meal.Magnesium,
-                            Potassium = df.Meal.Potassium,
-                            Sodium = df.Meal.Sodium,
-                            Zinc = df.Meal.Zinc,
-                            Retinol = df.Meal.Retinol,
-                            VitaminA = df.Meal.VitaminA,
-                            BetaCarotene = df.Meal.BetaCarotene,
-                            VitaminD = df.Meal.VitaminD,
-                            VitaminC = df.Meal.VitaminC,
-                            Folate = df.Meal.Folate,
-                            VitaminB12 = df.Meal.VitaminB12,
-                            VitaminK = df.Meal.VitaminK,
-                            Cholesterol = df.Meal.Cholesterol,
-                            SaturatedFattyAcids = df.Meal.SaturatedFattyAcids,
-                            MonounsaturatedFattyAcids = df.Meal.MonounsaturatedFattyAcids,
-                            PolyunsaturatedFattyAcids = df.Meal.PolyunsaturatedFattyAcids,
-                            quantity = df.Quantity
-                        })
-                    .ToListAsync(cancellationToken);
+                var dietGoalMeals = user.Meals
+                    .Where(m => m.DietGoalId == user.DietGoal.Id)
+                    .Select(m => new ConsumedMealDto
+                    {
+                        Id = m.Id,
+                        name = m.name,
+                        description = m.description,
+                        calories = m.calories,
+                        proteins = m.proteins,
+                        carbs = m.carbs,
+                        fats = m.fats,
+                        Caffeine = m.Caffeine,
+                        Sugars = m.Sugars,
+                        Fiber = m.Fiber,
+                        Calcium = m.Calcium,
+                        Iron = m.Iron,
+                        Magnesium = m.Magnesium,
+                        Potassium = m.Potassium,
+                        Sodium = m.Sodium,
+                        Zinc = m.Zinc,
+                        Retinol = m.Retinol,
+                        VitaminA = m.VitaminA,
+                        BetaCarotene = m.BetaCarotene,
+                        VitaminD = m.VitaminD,
+                        VitaminC = m.VitaminC,
+                        Folate = m.Folate,
+                        VitaminB12 = m.VitaminB12,
+                        VitaminK = m.VitaminK,
+                        Cholesterol = m.Cholesterol,
+                        SaturatedFattyAcids = m.SaturatedFattyAcids,
+                        MonounsaturatedFattyAcids = m.MonounsaturatedFattyAcids,
+                        PolyunsaturatedFattyAcids = m.PolyunsaturatedFattyAcids,
+                        quantity = m.quantity
+                    })
+                    .ToList();
 
-                 return Result<List<ConsumedMealDto>>.Success(dietGoalMeals);
+                return Result<List<ConsumedMealDto>>.Success(dietGoalMeals);
             }
         }
     }

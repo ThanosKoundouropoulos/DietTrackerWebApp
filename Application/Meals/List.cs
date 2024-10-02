@@ -14,18 +14,28 @@ namespace Application.Meals
     {
         public class Query : IRequest<Result<List<MealDto>>> { }
 
-        public class Handler : IRequestHandler<Query, Result<List<MealDto>>>
+       public class Handler : IRequestHandler<Query, Result<List<MealDto>>>
+    {
+        private readonly DataContext _context;
+        private readonly IUserAccessor _userAccessor;  
+        public Handler(DataContext context, IUserAccessor userAccessor)
         {
-            private readonly DataContext _context;
+            _context = context;
+            _userAccessor = userAccessor;
+        }
 
-            public Handler(DataContext context)
+        public async Task<Result<List<MealDto>>> Handle(Query request, CancellationToken cancellationToken)
+        {
+            var username = _userAccessor.GetUsername();
+            var user = await _context.Users
+                .Include(u => u.Meals)
+                .FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
+
+            if (user == null)
             {
-                _context = context ?? throw new ArgumentNullException(nameof(context));
+                return Result<List<MealDto>>.Failure("User not found");
             }
-
-            public async Task<Result<List<MealDto>>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var meals = await _context.Meals
+                var meals =  user.Meals
                     .Select(meal => new MealDto
                     {
                         Id = meal.Id,
@@ -56,8 +66,9 @@ namespace Application.Meals
                         SaturatedFattyAcids = meal.SaturatedFattyAcids,
                         MonounsaturatedFattyAcids = meal.MonounsaturatedFattyAcids,
                         PolyunsaturatedFattyAcids = meal.PolyunsaturatedFattyAcids,
+                        quantity = meal.quantity
                     })
-                    .ToListAsync(cancellationToken);
+                    .ToList();
 
                 return Result<List<MealDto>>.Success(meals);
             }

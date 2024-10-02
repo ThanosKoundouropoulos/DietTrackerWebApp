@@ -10,7 +10,7 @@ namespace Application.Meals
         public double proteins { get; set; }
         public double carbs { get; set; }
         public double fats { get; set; }
-        public double quantity { get; set; }
+        public int quantity { get; set; }
          // New macronutrient fields
         public double Caffeine { get; set; }
         public double Sugars { get; set; }
