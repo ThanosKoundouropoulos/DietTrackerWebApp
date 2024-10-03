@@ -17,7 +17,7 @@ export const SearchResult = observer(({ result, onSelect }: Props) => {
         className="search-result"
         onClick={handleSelect}
       >
-        {result.name } has {result.calories} calories per 100 grams
+        {result.name },   has {result.calories} calories per 100 grams
       </div>
     );
   });

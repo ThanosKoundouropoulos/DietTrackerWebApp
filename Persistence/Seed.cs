@@ -1,14 +1,15 @@
-using System.Text;
 using System.Text.Json;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+
 
 namespace Persistence
 {
     public class Seed
     {
-        private const int BatchSize = 5;
+        private const int BatchSize = 1000;
 
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
@@ -35,52 +36,59 @@ namespace Persistence
 
                 await context.DietGoals.AddRangeAsync(dietGoals);
 
-                await InsertFoodsInBatches(context, "C:/Users/thano/Desktop/FoodData_Central_survey_food_json_2022-10-28.json", 
-                                                    "C:/Users/thano/Desktop/brandedDownload2.json");
+                
+                var brandedFoodFiles = new[]
+                {
+                    "C:/Users/thano/Desktop/output_1.json",
+                    "C:/Users/thano/Desktop/output_2.json",
+                    "C:/Users/thano/Desktop/output_3.json",
+                    "C:/Users/thano/Desktop/output_4.json",
+                    "C:/Users/thano/Desktop/output_5.json",
+                    "C:/Users/thano/Desktop/output_6.json",
+                    "C:/Users/thano/Desktop/output_7.json"
+                };
+
+                
+                await InsertFoodsInBatches(context, 
+                    "C:/Users/thano/Desktop/FoodData_Central_survey_food_json_2022-10-28.json", 
+                    brandedFoodFiles);
+
                 await context.Database.ExecuteSqlRawAsync("VACUUM");
                 await context.SaveChangesAsync();
             }
         }
 
-        private static async Task InsertFoodsInBatches(DataContext context, params string[] filePaths)
+        private static async Task InsertFoodsInBatches(DataContext context, string surveyFoodFilePath, string[] brandedFoodFiles)
         {
             var foods = new List<Food>();
-
-            foreach (var filePath in filePaths)
+            await foreach (var food in ReadSurveyFoodsFromJsonStreamAsync(surveyFoodFilePath))
             {
-                if (filePath.Contains("FoodData_Central_survey_food_json_2022-10-28.json"))
+                foods.Add(food);
+                if (foods.Count >= BatchSize)
                 {
-                    await foreach (var food in ReadSurveyFoodsFromJsonStreamAsync(filePath))
-                    {
-                        foods.Add(food);
-                        if (foods.Count >= BatchSize)
-                        {
-                            await SaveBatchAsync(context, foods);
-                            foods.Clear();
-                        }
-                    }
+                    await SaveBatchAsync(context, foods);
+                    foods.Clear();
                 }
-                else if (filePath.Contains("brandedDownload2.json"))
+            }
+            foreach (var filePath in brandedFoodFiles)
+            {
+                await foreach (var food in ReadBrandedFoodsFromJsonStreamAsync(filePath))
                 {
-                    await foreach (var food in ReadBrandedFoodsFromJsonStreamAsync(filePath))
+                    foods.Add(food);
+                    if (foods.Count >= BatchSize)
                     {
-                        foods.Add(food);
-                        if (foods.Count >= BatchSize)
-                        {
-                            await SaveBatchAsync(context, foods);
-                            foods.Clear();
-                        }
+                        await SaveBatchAsync(context, foods);
+                        foods.Clear();
                     }
                 }
             }
-
             if (foods.Any())
             {
                 await SaveBatchAsync(context, foods);
             }
         }
 
-       private static async Task SaveBatchAsync(DataContext context, List<Food> foods)
+        private static async Task SaveBatchAsync(DataContext context, List<Food> foods)
         {
             using (var transaction = await context.Database.BeginTransactionAsync())
             {
@@ -92,10 +100,10 @@ namespace Persistence
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception message for debugging
+        
                     Console.WriteLine($"Error saving batch: {ex.Message}");
                     await transaction.RollbackAsync();
-                    throw; // Rethrow to notify higher-level logic of the failure
+                    throw; 
                 }
             }
         }
@@ -104,14 +112,13 @@ namespace Persistence
         {
             await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 8192, useAsync: true);
             
-            // Read the entire JSON file in one go into a JsonDocument
             var jsonDoc = await JsonDocument.ParseAsync(stream);
             
             var foodsArray = jsonDoc.RootElement.GetProperty("SurveyFoods");
             
             foreach (var foodElement in foodsArray.EnumerateArray())
             {
-                var foodData = JsonSerializer.Deserialize<FoodData>(foodElement.GetRawText());
+                var foodData = System.Text.Json.JsonSerializer.Deserialize<FoodData>(foodElement.GetRawText());
                 if (foodData != null)
                 {
                     yield return Food.FromJson(foodData);
@@ -119,25 +126,23 @@ namespace Persistence
             }
         }
 
-private static async IAsyncEnumerable<Food> ReadBrandedFoodsFromJsonStreamAsync(string filePath)
-{
-    await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 8192, useAsync: true);
-    
-    // Read the entire JSON file in one go into a JsonDocument
-    var jsonDoc = await JsonDocument.ParseAsync(stream);
-    
-    var foodsArray = jsonDoc.RootElement.GetProperty("BrandedFoods");
-    
-    foreach (var foodElement in foodsArray.EnumerateArray())
-    {
-        var foodData = JsonSerializer.Deserialize<FoodData>(foodElement.GetRawText());
-        if (foodData != null)
+        private static async IAsyncEnumerable<Food> ReadBrandedFoodsFromJsonStreamAsync(string filePath)
         {
-            yield return Food.FromJson(foodData);
+            await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 8192, useAsync: true);
+
+            var jsonDoc = await JsonDocument.ParseAsync(stream);
+
+            var foodsArray = jsonDoc.RootElement.GetProperty("BrandedFoods");
+
+            foreach (var foodElement in foodsArray.EnumerateArray())
+            {
+                var foodData = System.Text.Json.JsonSerializer.Deserialize<FoodData>(foodElement.GetRawText());
+                if (foodData != null)
+                {
+                    yield return Food.FromJson(foodData);
+                }
+            }
         }
-    }
-}
-       
     }
 
 }

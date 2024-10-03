@@ -48,7 +48,7 @@ namespace Application.Foods
                     })
                     .Where(x => x.Distance <= 15) 
                     .OrderBy(x => x.Distance)
-                    .Take(5)
+                    .Take(10)
                     .Select(x => _mapper.Map<FoodDto>(x.Food))
                     .ToList();
 

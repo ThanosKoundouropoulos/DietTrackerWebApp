@@ -73,60 +73,50 @@ namespace Domain
     }
 }
 
-public class FoodData
-{
-    [JsonPropertyName("description")]
-    public string Description { get; set; }
-
-    [JsonPropertyName("foodNutrients")]
-    public List<FoodNutrient> FoodNutrients { get; set; }
-
-    public double GetNutrientAmount(int nutrientId)
+ public class FoodData
     {
-        var nutrient = FoodNutrients.Find(n => n.Nutrient.Id == nutrientId);
-        if (nutrient != null)
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("foodNutrients")]
+        public List<FoodNutrient> FoodNutrients { get; set; }
+
+        public double GetNutrientAmount(int nutrientId)
         {
-            return nutrient.Amount;
+            var nutrient = FoodNutrients.Find(n => n.Nutrient.Id == nutrientId);
+            return nutrient?.Amount ?? 0.0;
         }
-        return 0.0;
     }
-}
 
-public class FoodNutrient
-{
-    [JsonPropertyName("nutrient")]
-    public Nutrient Nutrient { get; set; }
+    public class FoodNutrient
+    {
+        [JsonPropertyName("nutrient")]
+        public Nutrient Nutrient { get; set; }
 
-    [JsonPropertyName("amount")]
-    public double Amount { get; set; }
-}
+        [JsonPropertyName("amount")]
+        public double Amount { get; set; }
+    }
 
-public class Nutrient
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public class Nutrient
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
 
-    [JsonPropertyName("number")]
-    public string Number { get; set; }
+        [JsonPropertyName("number")]
+        public string Number { get; set; }
 
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
-    [JsonPropertyName("rank")]
-    public int Rank { get; set; }
+        [JsonPropertyName("rank")]
+        public int Rank { get; set; }
 
-    [JsonPropertyName("unitName")]
-    public string UnitName { get; set; }
-}
+        [JsonPropertyName("unitName")]
+        public string UnitName { get; set; }
+    }
 
-public class SurveyFoodWrapper
-{
-    [JsonPropertyName("SurveyFoods")]
-    public List<FoodData> SurveyFoods { get; set; }
-}
-
-public class BrandedFoodWrapper
-{
-    [JsonPropertyName("BrandedFoods")]
-    public List<FoodData> BrandedFoods { get; set; }
-}
+    public class FoodWrapper
+    {
+        [JsonPropertyName("foods")]
+        public List<FoodData> Foods { get; set; }
+    }
